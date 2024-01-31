@@ -21,17 +21,16 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public class BaseEntity {
 
-	
 	@CreatedBy
 	@ManyToOne
 	@JoinColumn(name = "created_by", nullable = false, updatable = false)
 	private User createdBy;
-	
+
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(updatable = false, nullable = false)
+	@Column(updatable = false, nullable = false, name = "created_at")
 	private Date createdAt;
-	
+
 	@LastModifiedBy
 	@ManyToOne
 	@JoinColumn(name = "last_modified_by", nullable = true)

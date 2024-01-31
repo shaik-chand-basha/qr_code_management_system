@@ -41,7 +41,7 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name="user_id")
+	@Column(name = "user_id")
 	private Long userId;
 
 	private String firstName;
@@ -64,7 +64,7 @@ public class User implements UserDetails {
 
 	@ManyToMany(mappedBy = "user")
 	private List<UserRole> roles;
-	
+
 	private String email;
 
 	private String mobile_number;
@@ -95,7 +95,7 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		return null;
+		return this.roles;
 	}
 
 	@Override
