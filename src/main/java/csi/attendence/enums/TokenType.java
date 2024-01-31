@@ -1,4 +1,4 @@
-package chand.projects.selbuy.model.entity;
+package csi.attendence.enums;
 
 public enum TokenType {
 	

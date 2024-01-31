@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import chand.projects.selbuy.model.entity.TokenType;
+import csi.attendence.enums.TokenType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
