@@ -1,9 +1,9 @@
-package csi.attendence.model.request;
+package csi.attendence.model.response;
 
 import lombok.Data;
 
 @Data
-public class StudentRequest {
+public class StudentResponse {
 
 	private Long hallticketNumber;
 
@@ -16,6 +16,10 @@ public class StudentRequest {
 	private String yearOfJoin;
 
 	private String address;
-
+	
+	private boolean approved;
+	
+	
+	
 
 }

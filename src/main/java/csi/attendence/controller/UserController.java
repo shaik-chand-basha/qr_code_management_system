@@ -1,0 +1,13 @@
+package csi.attendence.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(path = UserController.BASE_URL)
+public class UserController {
+
+	public final static String BASE_URL = "/api/v1";
+	
+	
+}

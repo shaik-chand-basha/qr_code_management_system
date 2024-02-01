@@ -35,4 +35,5 @@ public class StudentInfo extends BaseEntity {
 
 	@Column(name = "class")
 	private String className;
+	
 }
