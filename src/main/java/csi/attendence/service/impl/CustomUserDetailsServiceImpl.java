@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import csi.attendence.entity.User;
 import csi.attendence.exceptions.BadRequestException;
+import csi.attendence.model.mapper.UserMapper;
 import csi.attendence.model.request.UserRequest;
 import csi.attendence.repository.UserRepository;
 import csi.attendence.service.CustomUserDetailsService;
@@ -21,8 +22,15 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		if (request == null) {
 			throw new BadRequestException("userinfo should not be empty.");
 		}
+
+		checkUserExistance(request);
+		User requestedUser = UserMapper.mapToUser(request, new User());
 		
 		return null;
+	}
+
+	void checkUserExistance(UserRequest request) {
+
 	}
 
 	@Override
