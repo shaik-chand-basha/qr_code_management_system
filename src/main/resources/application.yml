@@ -25,4 +25,7 @@ spring:
   web:
     resources:
       static-locations:
-        - file:C:/data/
+        - file:${image.folder_path}
+        
+  mvc:
+    static-path-pattern: /resource/**
