@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import csi.attendence.enums.GenderEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -66,23 +67,23 @@ public class User implements UserDetails {
 	@JoinColumn(name = "fk_profile")
 	private ImageMetadata fkProfile;
 
-	@ManyToMany(mappedBy = "user")
+	@ManyToMany(mappedBy = "user",cascade = CascadeType.ALL)
 	private List<UserRole> roles;
 
 	private String email;
 
-	private String mobile_number;
+	private String mobileNumber;
 
 	@JdbcTypeCode(value = Types.BIT)
 	private Boolean active;
 
 	@CreatedBy
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "created_by", nullable = true, updatable = false)
 	private User createdBy;
 
 	@LastModifiedBy
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "last_modified_by", nullable = true)
 	private User lastModifiedBy;
 

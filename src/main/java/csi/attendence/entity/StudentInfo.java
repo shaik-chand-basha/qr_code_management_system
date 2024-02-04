@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -19,9 +20,12 @@ import lombok.EqualsAndHashCode;
 public class StudentInfo extends BaseEntity {
 
 	@Id
+	@Column(name="fk_user_id")
+	private Long id;
+	
 	@OneToOne
-	@JoinColumn(name = "fk_user_id")
-	private User id;
+    @PrimaryKeyJoinColumn(name="fk_user_id", referencedColumnName="user_id")
+	private User user;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_approved_by")
