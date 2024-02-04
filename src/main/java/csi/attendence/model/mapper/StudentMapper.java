@@ -2,6 +2,7 @@ package csi.attendence.model.mapper;
 
 import csi.attendence.entity.StudentInfo;
 import csi.attendence.model.request.StudentRequest;
+import csi.attendence.model.response.StudentResponse;
 
 public class StudentMapper {
 
@@ -9,7 +10,7 @@ public class StudentMapper {
 		return null;
 	}
 
-	public static StudentRequest mapToStudentRequest(StudentInfo studentInfo, StudentRequest request) {
+	public static StudentResponse mapToStudentResponse(StudentInfo studentInfo, StudentResponse response) {
 		return null;
 	}
 

@@ -1,13 +1,11 @@
 package csi.attendence.model.request;
 
-import java.time.LocalDate;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
+import csi.attendence.constraints.OnCreate;
+import csi.attendence.constraints.ValidYear;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -16,31 +14,29 @@ import lombok.Data;
 @Validated
 public class StudentRequest {
 
-	@NotBlank
+	@NotBlank(groups = { OnCreate.class })
 	@Pattern(regexp = "^130[34]\\d{8}$")
 	@Size(min = 12, max = 12)
 	private String hallticketNum;
 
+	@NotBlank(groups = { OnCreate.class })
 	@Size(min = 10)
 	private String csiId;
 
-	@NotBlank
+	@NotBlank(groups = { OnCreate.class })
 	private String className;
 
-	@NotBlank
+	@NotBlank(groups = { OnCreate.class })
 	private String college;
 
-	@PastOrPresent(message = "The year of joining must be in the present or the past")
-	@NotBlank
-	private LocalDate yearOfJoin;
+	@ValidYear(past = true, present = true)
+	@NotBlank(groups = { OnCreate.class })
+	private Integer yearOfJoin;
 
 	private String address;
 
-	@NotNull
+	
+	@NotBlank(groups = { OnCreate.class })
 	private UserRequest userInfo;
-
-	public int getYearOfJoining() {
-		return this.yearOfJoin.getYear();
-	}
 
 }

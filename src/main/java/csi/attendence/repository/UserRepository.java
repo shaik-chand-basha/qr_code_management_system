@@ -13,8 +13,8 @@ import jakarta.validation.constraints.NotBlank;
 @Validated
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	@Query(value = "From User as u left join fetch u.roles where u.email=:username or u.mobile_number=:username or u.username=:username limit 1")
-	Optional<User> findUserByEmailOrMobileNumberOrUsername(@Valid @NotBlank String username);
+//	@Query(value = "From User as u left join fetch u.roles where u.email=:username or u.userName=:username")
+//	Optional<User> findUserByEmailOrMobileNumberOrUsername(@Valid @NotBlank String username);
 
 	boolean existsByEmail(String email);
 

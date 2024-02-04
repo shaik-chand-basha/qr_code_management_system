@@ -86,16 +86,18 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 			requestedStudent.setApproved(true);
 			requestedStudent.setFkApprovedBy(loggedInUser);
 		}
-		return null;
+		StudentInfo savedStudentInfo = this.studentRepository.save(requestedStudent);
+		return StudentMapper.mapToStudentResponse(savedStudentInfo, new StudentResponse());
 	}
 
 	public void checkStudentExistence(StudentInfo requestedStudent) throws AlreadyExistsException {
-	
-		boolean existsByHallticketNum = this.studentRepository.existsByHallticketNum(requestedStudent.getHallticketNum());
-		if(existsByHallticketNum) {
+
+		boolean existsByHallticketNum = this.studentRepository
+				.existsByHallticketNum(requestedStudent.getHallticketNum());
+		if (existsByHallticketNum) {
 			throw new AlreadyExistsException("Student", "hallticket number", requestedStudent.getHallticketNum());
 		}
-		
+
 	}
 
 	public User saveUser(UserRequest request, MultipartFile file) throws IllegalStateException, IOException {
@@ -160,10 +162,11 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		if (Strings.isBlank(username)) {
 			throw new UsernameNotFoundException("username should not be empty.");
 		}
-		String usernameNotFoundMessage = String.format("user with username: %s not found.", username);
-		User user = this.userRepository.findUserByEmailOrMobileNumberOrUsername(username)
-				.orElseThrow(() -> new UsernameNotFoundException(usernameNotFoundMessage));
-		return user;
+//		String usernameNotFoundMessage = String.format("user with username: %s not found.", username);
+//		User user = this.userRepository.findUserByEmailOrMobileNumberOrUsername(username)
+//				.orElseThrow(() -> new UsernameNotFoundException(usernameNotFoundMessage));
+//		return null;
+		return null;
 	}
 
 }
