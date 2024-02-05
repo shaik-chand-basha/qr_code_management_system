@@ -49,6 +49,7 @@ public class UserMapper {
 		if (user.getCreatedBy() != null) {
 
 		}
+		response.setDob(user.getDob());
 		response.setCreatedBy(toUserInfoResponse(user.getCreatedBy()));
 		response.setCreatedAt(user.getCreatedAt());
 		response.setLastModifiedBy(toUserInfoResponse(user.getLastModifiedBy()));
@@ -58,7 +59,7 @@ public class UserMapper {
 	}
 
 	public static UserInfoResponse toUserInfoResponse(User user) {
-		if (user == null) {
+		if (user == null || user.getFkProfile() == null) {
 			return null;
 		}
 		return UserInfoResponse.builder().userId(user.getUserId()).firstName(user.getFirstName())

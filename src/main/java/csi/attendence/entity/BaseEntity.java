@@ -33,7 +33,7 @@ public class BaseEntity {
 
 	@LastModifiedBy
 	@ManyToOne
-	@JoinColumn(name = "last_modified_by", nullable = true)
+	@JoinColumn(name = "last_modified_by", nullable = true,insertable = false,updatable = true)
 	private User lastModifiedBy;
 
 	@LastModifiedDate

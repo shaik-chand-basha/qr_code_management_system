@@ -4,12 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import csi.attendence.constraints.OnCreate;
+import csi.attendence.constraints.OnUpdate;
 import csi.attendence.enums.GenderEnum;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -29,21 +27,25 @@ public class UserRequest {
 
 	private String lastName;
 
-	@NotNull
+	@NotNull(groups = { OnCreate.class })
 	private GenderEnum gender;
 
-	@Past
+	@NotNull(groups = { OnCreate.class })
+	@Past(groups = { OnCreate.class,OnUpdate.class })
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dob;
-
-	@Size(min = 8, max = 20)
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).+$", message = "Password should contain atleast 1 capital letter, 1 Upper letter,1 Special letter,1 Number")
+	
+	@NotBlank(groups = { OnCreate.class })
+	@Size(min = 8, max = 20,groups = { OnCreate.class,OnUpdate.class })
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).+$", message = "Password should contain atleast 1 capital letter, 1 Upper letter,1 Special letter,1 Number",groups = { OnCreate.class,OnUpdate.class })
 	private String password;
-
-	@Email
+	
+	@NotBlank(groups = { OnCreate.class })
+	@Email(groups = { OnCreate.class,OnUpdate.class })
 	private String email;
-
-	@Size(min = 10, max = 10)
+	
+	@NotBlank(groups = { OnCreate.class })
+	@Size(min = 10, max = 10,groups = { OnCreate.class,OnUpdate.class })
 	private String mobileNumber;
 
 

@@ -3,6 +3,8 @@ package csi.attendence.entity;
 import java.util.Date;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import csi.attendence.enums.TokenType;
 import jakarta.persistence.Column;
@@ -16,16 +18,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Builder
 @Table(name = "authentication_details")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class AuthenticationInfo extends BaseEntity {
+@EqualsAndHashCode()
+public class AuthenticationInfo {
 
 	@Id
 	@GeneratedValue(generator = "native")
@@ -46,5 +46,17 @@ public class AuthenticationInfo extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "fk_user_id", nullable = true, updatable = false)
 	private User fkUserId;
+	
+	
+	@CreatedDate
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(updatable = false, nullable = false, name = "created_at")
+	private Date createdAt;
+
+
+	@LastModifiedDate
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	private Date lastModifiedAt;
 
 }

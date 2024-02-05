@@ -2,33 +2,33 @@ server:
   port: 8000
   
 image:
-  folder_path: C:/data/
+  folder_path: C:\\qr_code_management_system\\resource
   
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
+    url: jdbc:mysql://localhost:3306/user_registration
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: p@s3$123
   h2:
     console:
       enabled: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
   flyway:
     clean-disabled: false
     clean-on-validation-error: true
-    
-#  web:
-#    resources:
-#      static-locations:
-#        - file:${image.folder_path}
-#        
-#  mvc:
-#    static-path-pattern: /resource/**
+    baseline-on-migrate: true
+  web:
+    resources:
+      static-locations:
+        - file:${image.folder_path}
+        
+  mvc:
+    static-path-pattern: /resource/**
     
 
 springdoc:

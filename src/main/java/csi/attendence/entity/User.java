@@ -58,8 +58,6 @@ public class User implements UserDetails {
 //	@JdbcTypeCode(Types.E)
 	private GenderEnum gender;
 
-	@Column(name = "username")
-	private Long userName;
 
 	private String password;
 

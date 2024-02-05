@@ -18,6 +18,8 @@ public class StudentResponse {
 	private String address;
 
 	private boolean approved;
+	
+	private UserResponse userInfo;
 
 	private UserInfoResponse approvedBy;
 

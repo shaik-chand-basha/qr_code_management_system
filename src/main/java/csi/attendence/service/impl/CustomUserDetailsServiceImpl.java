@@ -10,11 +10,10 @@ import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import csi.attendence.entity.ImageMetadata;
@@ -33,10 +32,12 @@ import csi.attendence.repository.StudentRepository;
 import csi.attendence.repository.UserRepository;
 import csi.attendence.repository.UserroleRepository;
 import csi.attendence.service.CustomUserDetailsService;
+import csi.attendence.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final UserRepository userRepository;
@@ -52,39 +53,23 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	@Value("${image.folder_path}")
 	private String imageFolderPath;
 
-	public static User getLoggedInUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			User loggedInUser = (User) authentication.getPrincipal();
-			return loggedInUser;
-		}
-		return null;
-	}
-
-	public static boolean isUserAdmin(User user) {
-		boolean isAdmin = false;
-
-		if (user != null) {
-			isAdmin = user.getRoles().stream().anyMatch(x -> x.getRole().equals("ROLE_ADMIN"));
-		}
-		return isAdmin;
-	}
-
-	public StudentResponse saveStudent(StudentRequest request,UserRequest userRequest, MultipartFile file)
-			throws IllegalStateException, IOException {
+	@Override
+	public StudentResponse saveStudent(StudentRequest request) {
 		if (request == null) {
 			throw new BadRequestException("studentinfo should not be empty.");
 		}
-		User loggedInUser = getLoggedInUser();
-		boolean userAdmin = isUserAdmin(loggedInUser);
-		StudentInfo requestedStudent = StudentMapper.mapToStudentInfo(request, StudentInfo.builder().build());
-
+		User loggedInUser = AuthenticationUtils.getLoggedInUser();
+		boolean userAdmin = AuthenticationUtils.isUserAdmin(loggedInUser);
+		StudentInfo requestedStudent = StudentMapper.mapToStudentInfo(request, new StudentInfo());
+		UserRequest userRequest = request.getUserInfo();
 		checkStudentExistence(requestedStudent);
-		User savedUser = saveUser(userRequest, file);
+		User savedUser = saveUser(userRequest);
 		requestedStudent.setUser(savedUser);
 		if (userAdmin) {
 			requestedStudent.setApproved(true);
 			requestedStudent.setFkApprovedBy(loggedInUser);
+		}else {
+			requestedStudent.setApproved(false);
 		}
 		StudentInfo savedStudentInfo = this.studentRepository.save(requestedStudent);
 		return StudentMapper.mapToStudentResponse(savedStudentInfo, new StudentResponse());
@@ -98,9 +83,16 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 			throw new AlreadyExistsException("Student", "hallticket number", requestedStudent.getHallticketNum());
 		}
 
+		boolean existsByCsiId = this.studentRepository
+				.existsByCsiId(requestedStudent.getCsiId());
+		if (existsByCsiId) {
+			throw new AlreadyExistsException("Student", "CSI Id", requestedStudent.getCsiId());
+		}
+
 	}
 
-	public User saveUser(UserRequest request, MultipartFile file) throws IllegalStateException, IOException {
+	@Override
+	public User saveUser(UserRequest request) {
 
 		if (request == null) {
 			throw new BadRequestException("userinfo should not be empty.");
@@ -108,13 +100,10 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 		checkUserExistance(request);
 
-		User loggedInUser = getLoggedInUser();
+		User loggedInUser = AuthenticationUtils.getLoggedInUser();
 
-		boolean isAdmin = false;
+		boolean userAdmin = AuthenticationUtils.isUserAdmin(loggedInUser);
 
-		if (loggedInUser != null) {
-			isAdmin = loggedInUser.getRoles().stream().anyMatch(x -> x.getRole().equals("ROLE_ADMIN"));
-		}
 		User requestedUser = UserMapper.mapToUser(request, new User());
 
 		requestedUser.setPassword(passwordEncoder.encode(requestedUser.getPassword()));
@@ -124,8 +113,6 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 			throw new RuntimeException("Atleast one role required");
 		}
 
-		ImageMetadata savedImage = saveImageMetadata(file);
-		requestedUser.setFkProfile(savedImage);
 		requestedUser.setRoles(roles);
 
 		User savedUser = userRepository.save(requestedUser);
@@ -143,8 +130,9 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		File destinationFile = Path.of(imageFolderPath, fileName).toFile();
 
 		imageFile.transferTo(destinationFile);
-		ImageMetadata imageToSave = ImageMetadata.builder().imageType(imageFile.getContentType())
-				.pathToImage(destinationFile.getAbsolutePath()).build();
+		ImageMetadata imageToSave = new ImageMetadata();
+		imageToSave.setImageType(imageFile.getContentType());
+		imageToSave.setPathToImage(destinationFile.getAbsolutePath());
 		ImageMetadata savedImage = imageRepository.save(imageToSave);
 		return savedImage;
 
@@ -152,9 +140,17 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	void checkUserExistance(UserRequest request) {
 
-		/**
-		 * check user existence 1. mobile number 2. email
-		 */
+		boolean existsByEmail = this.userRepository.existsByEmail(request.getEmail());
+		
+		if (existsByEmail) {
+			throw new AlreadyExistsException("User", "email", request.getEmail());
+		}
+		
+		boolean existsByMobileNumber = this.userRepository.existsByMobileNumber(request.getMobileNumber());
+		
+		if (existsByMobileNumber) {
+			throw new AlreadyExistsException("User", "mobileNumber", request.getMobileNumber());
+		}
 	}
 
 	@Override

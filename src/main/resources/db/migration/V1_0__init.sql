@@ -1,17 +1,14 @@
---drop  database if exists user_registration;
---create database user_registration;
---
---USE user_registration;
+
 
 CREATE TABLE user_info (
-    user_id BIGINT PRIMARY KEY,
+    user_id BIGINT PRIMARY KEY auto_increment,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     gender ENUM('M', 'F', 'O') NOT NULL,
-    username BIGINT NOT NULL,
     password VARCHAR(400) NOT NULL,
-    email VARCHAR(50),
-    mobile_number VARCHAR(20),
+    email VARCHAR(50) unique,
+    mobile_number VARCHAR(20) unique,
+    dob date,
     active BIT DEFAULT 0,
     created_by BIGINT,
     created_at timestamp,
@@ -56,6 +53,8 @@ CREATE TABLE user_info_role (
         REFERENCES user_info (user_id)
 );
 
+insert into user_role(`user_role`,`active`) values ("ROLE_ADMIN",1),("ROLE_STUDENT",1),("ROLE_INCHARGE",1);
+
 CREATE TABLE email_verification (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     fk_user_id BIGINT,
@@ -63,6 +62,7 @@ CREATE TABLE email_verification (
     otp_generated_at timestamp NOT NULL,
     otp_expires timestamp NOT NULL,
     email_verified BIT DEFAULT 0,
+    active bit default 0,
     CONSTRAINT email_verification_fk_user_id FOREIGN KEY (fk_user_id)
         REFERENCES user_info (user_id)
 );
@@ -71,9 +71,10 @@ CREATE TABLE email_verification (
 CREATE TABLE student_details (
     fk_user_id BIGINT primary key,
     address VARCHAR(500),
-    hallticket_num VARCHAR(100),
-    csi_id VARCHAR(30),
+    hallticket_num VARCHAR(100) unique,
+    csi_id VARCHAR(30) unique,
     class VARCHAR(50),
+    college varchar(200),
     year_of_join VARCHAR(5),
     approved BIT,
     fk_approved_by BIGINT,
@@ -180,16 +181,10 @@ CREATE TABLE authentication_details (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     token VARCHAR(500) NOT NULL,
     token_type ENUM('ACCESS_TOKEN', 'REFRESH_TOKEN') NOT NULL,
-    expires_at timestamp NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
     active BIT NOT NULL,
-    created_by BIGINT,
-    created_at timestamp,
-    last_modified_by BIGINT,
-    last_modified_at timestamp,
-    CONSTRAINT authentication_details_created_by FOREIGN KEY (created_by)
-        REFERENCES user_info (user_id),
-    CONSTRAINT authentication_details_last_modified_by FOREIGN KEY (last_modified_by)
-        REFERENCES user_info (user_id),
+    created_at TIMESTAMP,
+    last_modified_at TIMESTAMP,
     fk_user_id BIGINT,
     CONSTRAINT authentication_details_fk_user_id FOREIGN KEY (fk_user_id)
         REFERENCES user_info (user_id)

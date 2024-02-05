@@ -27,7 +27,7 @@ public class SpringSecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.formLogin(fl -> fl.disable());
+//		http.formLogin(fl -> fl.disable());
 		http.httpBasic(t -> {
 			t.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint());
 		});
@@ -39,6 +39,9 @@ public class SpringSecurityConfig {
 			rem.disable();
 		});
 
+        http.headers(headers -> headers.frameOptions(x -> {
+            x.sameOrigin();
+        }));
 		return http.build();
 	}
 	

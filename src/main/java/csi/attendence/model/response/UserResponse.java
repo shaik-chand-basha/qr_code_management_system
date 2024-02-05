@@ -35,5 +35,4 @@ public class UserResponse {
 
 	private Date lastModifiedAt;
 
-	private StudentResponse studentDetails;
 }

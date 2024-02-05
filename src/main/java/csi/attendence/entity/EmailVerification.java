@@ -12,14 +12,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import lombok.Builder;
 import lombok.Data;
 
 @Entity
-@Builder
 @Table(name = "email_verification")
 @Data
 public class EmailVerification {
+	
 
 	@Id
 	@GeneratedValue(generator = "native")
@@ -37,6 +36,8 @@ public class EmailVerification {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date otpExpires;
+
+	private Boolean active;
 
 	private Boolean emailVerified;
 

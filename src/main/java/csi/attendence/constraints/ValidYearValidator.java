@@ -27,6 +27,7 @@ public class ValidYearValidator implements ConstraintValidator<ValidYear, Intege
 		String messageTemplate = "";
 
 		Integer currentYear = Year.now().getValue();
+		System.out.println(currentYear);
 		if (validYear.past()) {
 			isValid = value < currentYear;
 		} else if (validYear.present()) {

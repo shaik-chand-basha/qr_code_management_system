@@ -3,6 +3,7 @@ package csi.attendence.model.mapper;
 import csi.attendence.entity.StudentInfo;
 import csi.attendence.model.request.StudentRequest;
 import csi.attendence.model.response.StudentResponse;
+import csi.attendence.model.response.UserResponse;
 
 public class StudentMapper {
 
@@ -13,8 +14,7 @@ public class StudentMapper {
 		}
 
 		if (studentInfo == null) {
-			studentInfo = StudentInfo.builder().build();// Return null or throw an exception based on your error
-														// handling policy
+			studentInfo = new StudentInfo();
 		}
 
 		// Set fields from request to studentInfo if they are not null
@@ -28,10 +28,16 @@ public class StudentMapper {
 			studentInfo.setClassName(request.getClassName());
 		}
 		if (request.getYearOfJoin() != null) {
-			studentInfo.setYearOfJoin(request.getYearOfJoin().toString());
+			studentInfo.setYearOfJoin(request.getYearOfJoin());
+		}
+		if(request.getCollege() != null) {
+			studentInfo.setCollege(request.getCollege());
 		}
 		if (request.getAddress() != null) {
 			studentInfo.setAddress(request.getAddress());
+		}
+		if(request.getApproved() != null) {
+			studentInfo.setApproved(request.getApproved());
 		}
 
 		return studentInfo;
@@ -52,9 +58,10 @@ public class StudentMapper {
 		response.setCsiId(studentInfo.getCsiId());
 		response.setClassName(studentInfo.getClassName());
 		response.setCollege(studentInfo.getCollege());
-		response.setYearOfJoin(studentInfo.getYearOfJoin());
+		response.setYearOfJoin(studentInfo.getYearOfJoin().toString());
 		response.setAddress(studentInfo.getAddress());
 		response.setApproved(studentInfo.getApproved() != null && studentInfo.getApproved());
+		response.setUserInfo(UserMapper.mapToUserResponse(studentInfo.getUser(), new UserResponse()));
 		if (studentInfo.getFkApprovedBy() != null) {
 			response.setApprovedBy(UserMapper.toUserInfoResponse(studentInfo.getFkApprovedBy()));
 		}
