@@ -34,7 +34,6 @@ public class UserRequest {
 
 	@Past
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Temporal(TemporalType.DATE)
 	private Date dob;
 
 	@Size(min = 8, max = 20)

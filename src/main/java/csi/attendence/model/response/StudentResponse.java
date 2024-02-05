@@ -16,10 +16,9 @@ public class StudentResponse {
 	private String yearOfJoin;
 
 	private String address;
-	
+
 	private boolean approved;
-	
-	
-	
+
+	private UserInfoResponse approvedBy;
 
 }

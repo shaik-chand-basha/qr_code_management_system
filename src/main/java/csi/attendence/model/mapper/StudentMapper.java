@@ -55,7 +55,9 @@ public class StudentMapper {
 		response.setYearOfJoin(studentInfo.getYearOfJoin());
 		response.setAddress(studentInfo.getAddress());
 		response.setApproved(studentInfo.getApproved() != null && studentInfo.getApproved());
-
+		if (studentInfo.getFkApprovedBy() != null) {
+			response.setApprovedBy(UserMapper.toUserInfoResponse(studentInfo.getFkApprovedBy()));
+		}
 		return response;
 	}
 
