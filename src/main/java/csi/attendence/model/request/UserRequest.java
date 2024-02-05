@@ -12,6 +12,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -45,14 +46,12 @@ public class UserRequest {
 
 	@Size(min = 10, max = 10)
 	private String mobileNumber;
-	
 
 
 	@NotBlank(groups = { OnCreate.class })
 	private String registrationType;
 
-	@NotBlank(groups = { OnCreate.class })
-	@Size(min = 1)
-	private List<String> role;
+	@NotEmpty(groups = { OnCreate.class })
+	private List<String> roles;
 
 }

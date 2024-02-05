@@ -26,8 +26,9 @@ public class UserController {
 
 	@PostMapping(path = "/student/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<StudentResponse> registerStudent(
-			@RequestPart @Validated(OnCreate.class) @Valid StudentRequest studentInfo,
-			@RequestPart @Validated(OnCreate.class) @Valid UserRequest userInfo, @NotNull MultipartFile profileImage
+			@RequestPart(required = true) @Validated(OnCreate.class) @Valid StudentRequest studentInfo,
+			@RequestPart(required = true) @Validated(OnCreate.class) @Valid UserRequest userInfo,
+			@RequestPart(required = true) @NotNull MultipartFile profileImage
 
 	) {
 		return null;

@@ -70,7 +70,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		return isAdmin;
 	}
 
-	public StudentResponse saveStudent(StudentRequest request, MultipartFile file)
+	public StudentResponse saveStudent(StudentRequest request,UserRequest userRequest, MultipartFile file)
 			throws IllegalStateException, IOException {
 		if (request == null) {
 			throw new BadRequestException("studentinfo should not be empty.");
@@ -80,7 +80,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		StudentInfo requestedStudent = StudentMapper.mapToStudentInfo(request, StudentInfo.builder().build());
 
 		checkStudentExistence(requestedStudent);
-		User savedUser = saveUser(request.getUserInfo(), file);
+		User savedUser = saveUser(userRequest, file);
 		requestedStudent.setUser(savedUser);
 		if (userAdmin) {
 			requestedStudent.setApproved(true);
@@ -119,7 +119,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 		requestedUser.setPassword(passwordEncoder.encode(requestedUser.getPassword()));
 
-		List<UserRole> roles = userroleRepository.findByRoleIn(request.getRole());
+		List<UserRole> roles = userroleRepository.findByRoleIn(request.getRoles());
 		if (roles.isEmpty()) {
 			throw new RuntimeException("Atleast one role required");
 		}
