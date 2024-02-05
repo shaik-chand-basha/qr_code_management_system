@@ -20,7 +20,7 @@ public class UserMapper {
 		if (user == null) {
 			user = new User();
 		}
-
+		Optional.ofNullable(request.getUserId()).ifPresent(user::setUserId);
 		Optional.ofNullable(request.getFirstName()).ifPresent(user::setFirstName);
 		Optional.ofNullable(request.getLastName()).ifPresent(user::setLastName);
 		Optional.ofNullable(request.getGender()).ifPresent(user::setGender);
@@ -46,9 +46,7 @@ public class UserMapper {
 		response.setEmail(user.getEmail());
 		response.setMobileNumber(user.getMobileNumber());
 		response.setRoles(user.getRoles().stream().map(UserRole::getRole).collect(Collectors.toList()));
-		if (user.getCreatedBy() != null) {
 
-		}
 		response.setDob(user.getDob());
 		response.setCreatedBy(toUserInfoResponse(user.getCreatedBy()));
 		response.setCreatedAt(user.getCreatedAt());
@@ -59,10 +57,11 @@ public class UserMapper {
 	}
 
 	public static UserInfoResponse toUserInfoResponse(User user) {
-		if (user == null || user.getFkProfile() == null) {
+		if (user == null) {
 			return null;
 		}
 		return UserInfoResponse.builder().userId(user.getUserId()).firstName(user.getFirstName())
-				.lastName(user.getLastName()).profileImage(user.getFkProfile().getPathToImage()).build();
+				.lastName(user.getLastName())
+				.profileImage(user.getFkProfile() != null ? user.getFkProfile().getPathToImage() : null).build();
 	}
 }

@@ -13,4 +13,6 @@ public interface CustomUserDetailsService extends UserDetailsService {
 
 	User saveUser(UserRequest request);
 
+	StudentResponse findStudent(Long id);
+
 }

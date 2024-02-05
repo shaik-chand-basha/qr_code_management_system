@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.util.Strings;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.data.annotation.CreatedBy;
@@ -22,6 +24,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -65,7 +68,8 @@ public class User implements UserDetails {
 	@JoinColumn(name = "fk_profile")
 	private ImageMetadata fkProfile;
 
-	@ManyToMany(mappedBy = "user",cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	private List<UserRole> roles;
 
 	private String email;
@@ -79,12 +83,14 @@ public class User implements UserDetails {
 	private Boolean active;
 
 	@CreatedBy
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "created_by", nullable = true, updatable = false)
 	private User createdBy;
 
 	@LastModifiedBy
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "last_modified_by", nullable = true)
 	private User lastModifiedBy;
 

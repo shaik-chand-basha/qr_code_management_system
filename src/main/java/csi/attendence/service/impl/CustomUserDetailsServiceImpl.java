@@ -33,6 +33,7 @@ import csi.attendence.repository.UserRepository;
 import csi.attendence.repository.UserroleRepository;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.utils.AuthenticationUtils;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -50,8 +51,24 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final PasswordEncoder passwordEncoder;
 
+	private final EntityManager em;
+
 	@Value("${image.folder_path}")
 	private String imageFolderPath;
+
+	@Override
+	public StudentResponse findStudent(Long id) {
+		if (id == null) {
+			throw new BadRequestException("StudentId should not be empty!");
+		}
+		User loggedInUser = AuthenticationUtils.getLoggedInUser();
+		boolean userAdmin = AuthenticationUtils.isUserAdmin(loggedInUser);
+//		if (loggedInUser == null) {
+//			return null;
+//		}
+		StudentInfo studentInfo = this.studentRepository.findById(id).orElse(null);
+		return StudentMapper.mapToStudentResponse(studentInfo, new StudentResponse());
+	}
 
 	@Override
 	public StudentResponse saveStudent(StudentRequest request) {
@@ -68,11 +85,12 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		if (userAdmin) {
 			requestedStudent.setApproved(true);
 			requestedStudent.setFkApprovedBy(loggedInUser);
-		}else {
+		} else {
 			requestedStudent.setApproved(false);
 		}
-		StudentInfo savedStudentInfo = this.studentRepository.save(requestedStudent);
-		return StudentMapper.mapToStudentResponse(savedStudentInfo, new StudentResponse());
+		StudentInfo savedStudentInfo = this.studentRepository.saveAndFlush(requestedStudent);
+		StudentInfo studentInfo = this.studentRepository.findById(savedStudentInfo.getId()).orElse(null);
+		return StudentMapper.mapToStudentResponse(studentInfo, new StudentResponse());
 	}
 
 	public void checkStudentExistence(StudentInfo requestedStudent) throws AlreadyExistsException {
@@ -83,8 +101,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 			throw new AlreadyExistsException("Student", "hallticket number", requestedStudent.getHallticketNum());
 		}
 
-		boolean existsByCsiId = this.studentRepository
-				.existsByCsiId(requestedStudent.getCsiId());
+		boolean existsByCsiId = this.studentRepository.existsByCsiId(requestedStudent.getCsiId());
 		if (existsByCsiId) {
 			throw new AlreadyExistsException("Student", "CSI Id", requestedStudent.getCsiId());
 		}
@@ -141,13 +158,13 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	void checkUserExistance(UserRequest request) {
 
 		boolean existsByEmail = this.userRepository.existsByEmail(request.getEmail());
-		
+
 		if (existsByEmail) {
 			throw new AlreadyExistsException("User", "email", request.getEmail());
 		}
-		
+
 		boolean existsByMobileNumber = this.userRepository.existsByMobileNumber(request.getMobileNumber());
-		
+
 		if (existsByMobileNumber) {
 			throw new AlreadyExistsException("User", "mobileNumber", request.getMobileNumber());
 		}
