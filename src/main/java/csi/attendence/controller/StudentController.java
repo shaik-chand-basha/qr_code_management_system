@@ -13,6 +13,8 @@ import csi.attendence.constraints.OnCreate;
 import csi.attendence.model.request.StudentRequest;
 import csi.attendence.model.response.StudentResponse;
 import csi.attendence.service.CustomUserDetailsService;
+import csi.attendence.utils.UrlUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,11 +28,13 @@ public class StudentController {
 
 	private final CustomUserDetailsService customUserDetailsService;
 
+	
+	
 	@PostMapping(path = "/student/register")
 	public ResponseEntity<StudentResponse> registerStudent(
-			@Validated(OnCreate.class) @Valid @RequestBody StudentRequest studentInfo) {
+			@Validated(OnCreate.class) @Valid @RequestBody StudentRequest studentInfo,HttpServletRequest request) {
 		System.out.println(studentInfo.getYearOfJoin());
-		StudentResponse saveStudent = customUserDetailsService.saveStudent(studentInfo);
+		StudentResponse saveStudent = customUserDetailsService.saveStudent(studentInfo,UrlUtils.getSiteURL(request));
 
 		return ResponseEntity.ok(saveStudent);
 	}

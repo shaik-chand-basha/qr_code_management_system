@@ -9,10 +9,11 @@ import csi.attendence.model.response.StudentResponse;
 
 public interface CustomUserDetailsService extends UserDetailsService {
 
-	StudentResponse saveStudent(StudentRequest request);
 
-	User saveUser(UserRequest request);
+	User saveUser(UserRequest request, String siteUrl);
 
 	StudentResponse findStudent(Long id);
+
+	StudentResponse saveStudent(StudentRequest request, String siteUrl);
 
 }

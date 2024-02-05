@@ -58,10 +58,11 @@ insert into user_role(`user_role`,`active`) values ("ROLE_ADMIN",1),("ROLE_STUDE
 CREATE TABLE email_verification (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     fk_user_id BIGINT,
-    otp VARCHAR(10) NOT NULL,
-    otp_generated_at timestamp NOT NULL,
+    token VARCHAR(100) NOT NULL,
+    created_at timestamp NOT NULL,
     otp_expires timestamp NOT NULL,
     email_verified BIT DEFAULT 0,
+    email varchar(100),
     active bit default 0,
     CONSTRAINT email_verification_fk_user_id FOREIGN KEY (fk_user_id)
         REFERENCES user_info (user_id)
@@ -75,7 +76,7 @@ CREATE TABLE student_details (
     csi_id VARCHAR(30) unique,
     class VARCHAR(50),
     college varchar(200),
-    year_of_join VARCHAR(5),
+    year_of_join int,
     approved BIT,
     fk_approved_by BIGINT,
     active BIT DEFAULT 0,

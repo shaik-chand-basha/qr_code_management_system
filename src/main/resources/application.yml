@@ -1,10 +1,15 @@
 server:
   port: 8000
-  
-image:
-  folder_path: C:\\qr_code_management_system\\resource
+
+application: 
+  image:
+    folder_path: C:\\qr_code_management_system\\resource
+  email_verification:
+    expires: 60
   
 spring:
+  application:
+    name: Aurora-QR-Code-base-Attendence-Management-System
   datasource:
     url: jdbc:mysql://localhost:3306/user_registration
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -16,7 +21,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
   flyway:
     clean-disabled: false
@@ -30,7 +35,18 @@ spring:
   mvc:
     static-path-pattern: /resource/**
     
-
+  mail:
+    port: 587
+    host: smtp.gmail.com
+    username: shaikchand8832@gmail.com
+    password: odwgejqhrpqzlgoj
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            
 springdoc:
   show-actuator: true
   api-docs:

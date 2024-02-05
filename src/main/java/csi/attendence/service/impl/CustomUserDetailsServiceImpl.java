@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import csi.attendence.entity.User;
 import csi.attendence.entity.UserRole;
 import csi.attendence.exceptions.AlreadyExistsException;
 import csi.attendence.exceptions.BadRequestException;
+import csi.attendence.listener.events.OnRegisterUserEvent;
 import csi.attendence.model.mapper.StudentMapper;
 import csi.attendence.model.mapper.UserMapper;
 import csi.attendence.model.request.StudentRequest;
@@ -53,7 +55,9 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final EntityManager em;
 
-	@Value("${image.folder_path}")
+	private final ApplicationEventPublisher applicationEventPublisher;
+
+	@Value("${application.image.folder_path}")
 	private String imageFolderPath;
 
 	@Override
@@ -71,7 +75,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	}
 
 	@Override
-	public StudentResponse saveStudent(StudentRequest request) {
+	public StudentResponse saveStudent(StudentRequest request, String siteUrl) {
 		if (request == null) {
 			throw new BadRequestException("studentinfo should not be empty.");
 		}
@@ -80,7 +84,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		StudentInfo requestedStudent = StudentMapper.mapToStudentInfo(request, new StudentInfo());
 		UserRequest userRequest = request.getUserInfo();
 		checkStudentExistence(requestedStudent);
-		User savedUser = saveUser(userRequest);
+		User savedUser = saveUser(userRequest,siteUrl);
 		requestedStudent.setUser(savedUser);
 		if (userAdmin) {
 			requestedStudent.setApproved(true);
@@ -90,6 +94,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		}
 		StudentInfo savedStudentInfo = this.studentRepository.saveAndFlush(requestedStudent);
 		StudentInfo studentInfo = this.studentRepository.findById(savedStudentInfo.getId()).orElse(null);
+		
 		return StudentMapper.mapToStudentResponse(studentInfo, new StudentResponse());
 	}
 
@@ -109,7 +114,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	}
 
 	@Override
-	public User saveUser(UserRequest request) {
+	public User saveUser(UserRequest request,String siteURL) {
 
 		if (request == null) {
 			throw new BadRequestException("userinfo should not be empty.");
@@ -133,6 +138,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		requestedUser.setRoles(roles);
 
 		User savedUser = userRepository.save(requestedUser);
+		this.applicationEventPublisher.publishEvent(new OnRegisterUserEvent(savedUser, siteURL));
 		return savedUser;
 	}
 
