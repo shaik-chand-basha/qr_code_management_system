@@ -1,6 +1,6 @@
 package csi.attendence.model.request;
 
-import org.springframework.validation.annotation.Validated;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import csi.attendence.constraints.OnCreate;
 import csi.attendence.constraints.ValidYear;
@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-@Validated
 public class StudentRequest {
 
 	@NotBlank(groups = { OnCreate.class })
@@ -29,14 +28,11 @@ public class StudentRequest {
 	@NotBlank(groups = { OnCreate.class })
 	private String college;
 
-	@ValidYear(past = true, present = true)
-	@NotBlank(groups = { OnCreate.class })
+	@ValidYear(past = true, present = true, groups = { OnCreate.class })
+	@NotNull(groups = { OnCreate.class })
 	private Integer yearOfJoin;
 
 	private String address;
 
-	
-	@NotBlank(groups = { OnCreate.class })
-	private UserRequest userInfo;
 
 }

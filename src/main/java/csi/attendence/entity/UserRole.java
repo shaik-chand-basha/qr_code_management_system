@@ -13,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Builder;
 import lombok.Data;
 
@@ -44,6 +45,7 @@ public class UserRole implements GrantedAuthority {
 	private List<User> user;
 
 	@Override
+	@Transient
 	public String getAuthority() {
 		return this.role;
 	}

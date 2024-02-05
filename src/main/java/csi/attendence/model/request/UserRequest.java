@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import csi.attendence.constraints.OnCreate;
 import csi.attendence.enums.GenderEnum;
@@ -44,6 +45,8 @@ public class UserRequest {
 
 	@Size(min = 10, max = 10)
 	private String mobileNumber;
+	
+
 
 	@NotBlank(groups = { OnCreate.class })
 	private String registrationType;

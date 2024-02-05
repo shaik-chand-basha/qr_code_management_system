@@ -22,10 +22,17 @@ spring:
     clean-disabled: false
     clean-on-validation-error: true
     
-  web:
-    resources:
-      static-locations:
-        - file:${image.folder_path}
-        
-  mvc:
-    static-path-pattern: /resource/**
+#  web:
+#    resources:
+#      static-locations:
+#        - file:${image.folder_path}
+#        
+#  mvc:
+#    static-path-pattern: /resource/**
+    
+
+springdoc:
+  show-actuator: true
+  api-docs:
+    enabled: true
+  

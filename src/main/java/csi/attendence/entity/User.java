@@ -73,6 +73,9 @@ public class User implements UserDetails {
 	private String email;
 
 	private String mobileNumber;
+	
+	@Temporal(TemporalType.DATE)
+	private Date dob;
 
 	@JdbcTypeCode(value = Types.BIT)
 	private Boolean active;

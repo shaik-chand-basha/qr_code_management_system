@@ -37,6 +37,8 @@ public class StudentInfo extends BaseEntity {
 	private String yearOfJoin;
 	private Boolean approved;
 
+	private String college;
+	
 	@Column(name = "class")
 	private String className;
 	

@@ -1,6 +1,7 @@
 package csi.attendence.model.response;
 
 import java.util.Date;
+import java.util.List;
 
 import csi.attendence.entity.User;
 import csi.attendence.enums.GenderEnum;
@@ -21,7 +22,7 @@ public class UserResponse {
 
 	private String mobileNumber;
 
-	private String role;
+	private List<String> role;
 
 	private User createdBy;
 

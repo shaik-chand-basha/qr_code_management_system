@@ -34,7 +34,7 @@ public class SpringSecurityConfig {
 		http.sessionManagement(sm -> {
 			sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		});
-
+		http.csrf(x->x.disable());
 		http.rememberMe(rem -> {
 			rem.disable();
 		});
