@@ -1,5 +1,6 @@
 package csi.attendence.model.mapper;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import csi.attendence.entity.UserRole;
 import csi.attendence.model.request.UserRequest;
 import csi.attendence.model.response.UserInfoResponse;
 import csi.attendence.model.response.UserResponse;
+import csi.attendence.utils.UrlUtils;
 
 public class UserMapper {
 
@@ -67,6 +69,8 @@ public class UserMapper {
 		}
 		return UserInfoResponse.builder().userId(user.getUserId()).firstName(user.getFirstName())
 				.lastName(user.getLastName())
-				.profileImage(user.getFkProfile() != null ? user.getFkProfile().getPathToImage() : null).build();
+				.profileImage(user.getFkProfile() != null ? UrlUtils.pathToUrl(user.getFkProfile().getPathToImage()) : null).build();
 	}
+	
+	
 }

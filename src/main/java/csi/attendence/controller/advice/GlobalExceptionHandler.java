@@ -57,6 +57,15 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex, WebRequest request) {
+
+		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage()).message(ex.getMessage())
+				.path(request.getDescription(false).replace("uri=", "")).build();
+
+		return ResponseEntity.internalServerError().body(errorResponse);
+	}
 
 
 }

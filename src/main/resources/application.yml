@@ -35,10 +35,11 @@ spring:
   web:
     resources:
       static-locations:
-        - file:${image.folder_path}
-        
+        - file:C:\\qr_code_management_system\\resource
+
   mvc:
     static-path-pattern: /resource/**
+    
     
   mail:
     port: 587

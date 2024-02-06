@@ -12,6 +12,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ import csi.attendence.model.mapper.StudentMapper;
 import csi.attendence.model.mapper.UserMapper;
 import csi.attendence.model.request.StudentRequest;
 import csi.attendence.model.request.UserRequest;
+import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.StudentResponse;
 import csi.attendence.repository.ImageMetadataRepository;
 import csi.attendence.repository.StudentRepository;
@@ -148,6 +151,31 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		return savedUser;
 	}
 
+	@Override
+	public ApiResponse updateProfileImage(MultipartFile file) {
+		User loggedInUser = AuthenticationUtils.getLoggedInUser();
+		if(loggedInUser == null) {
+			throw new BadCredentialsException("Authentication required");
+		}
+		User user = this.userRepository.findById(loggedInUser.getUserId()).orElse(null);
+
+		try {
+			ImageMetadata imageMetadata = saveImageMetadata(file);
+			user.setFkProfile(imageMetadata);
+			User savedUser = this.userRepository.save(user);
+			ApiResponse apiResponse = ApiResponse.builder().message(imageMetadata.getPathToImage())
+					.status(HttpStatus.OK).build();
+			return apiResponse;
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public ImageMetadata saveImageMetadata(MultipartFile imageFile) throws IllegalStateException, IOException {
 		if (imageFile == null || imageFile.isEmpty()) {
 			return null;
@@ -155,7 +183,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
 
 		String randomFileName = UUID.randomUUID().toString().replace("-", "");
-		String fileName = "%s%l.%s".formatted(randomFileName, new Date().getTime(), extension);
+		String fileName = "%s%d.%s".formatted(randomFileName, new Date().getTime(), extension);
 		File destinationFile = Path.of(imageFolderPath, fileName).toFile();
 
 		imageFile.transferTo(destinationFile);
@@ -212,7 +240,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 			user = this.userRepository.findByHallticketNumber(Long.parseLong(username)).orElse(null);
 		}
-	
+
 		return user;
 
 	}
