@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import csi.attendence.entity.AuthenticationInfo;
 import csi.attendence.entity.User;
+import csi.attendence.model.response.AuthenticationResponse;
 import csi.attendence.repository.AuthenticationRepository;
 import csi.attendence.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
@@ -54,7 +55,7 @@ public class JwtAuthenticationServiceImpl {
 		return authenticationInfo.getUser();
 	}
 
-	public AuthenticationInfo generateAuthenticationInfoByRefreshToken(String refreshToken) {
+	public AuthenticationResponse generateAuthenticationInfoByRefreshToken(String refreshToken) {
 		if (Strings.isBlank(refreshToken)) {
 			throw new RuntimeException();
 		}
@@ -64,12 +65,12 @@ public class JwtAuthenticationServiceImpl {
 
 		AuthenticationInfo authenticationInfo = this.authenticationRepository.findByRefreshToken(refreshToken)
 				.orElseThrow();
-		AuthenticationInfo newAuthenticationInfo = generateAuthenticationInfo(authenticationInfo.getUser());
+		AuthenticationResponse newAuthenticationInfo = generateAuthenticationInfo(authenticationInfo.getUser());
 		this.authenticationRepository.deleteById(authenticationInfo.getId());
 		return newAuthenticationInfo;
 	}
 
-	public AuthenticationInfo generateAuthenticationInfo(User user) {
+	public AuthenticationResponse generateAuthenticationInfo(User user) {
 		UUID uuid = UUID.randomUUID();
 		String accessToken = generateAccessToken(uuid, user);
 		String refreshToken = generateRefreshToken(user);
@@ -78,8 +79,16 @@ public class JwtAuthenticationServiceImpl {
 		authenticationInfo.setToken(accessToken);
 		authenticationInfo.setRefreshToken(refreshToken);
 		authenticationInfo.setUser(user);
-		AuthenticationInfo savedAuthenticationInfo = this.authenticationRepository.save(authenticationInfo);
-		return savedAuthenticationInfo;
+		this.authenticationRepository.save(authenticationInfo);
+		AuthenticationResponse authenticationResponse = AuthenticationResponse.builder().accessToken(accessToken)
+				.refreshToken(refreshToken).expiresAt(calculateExpiryDate(TimeUnit.DAYS.toMillis(this.tokenExpires)))
+				.refreshTokenExpiresAt(calculateExpiryDate(TimeUnit.DAYS.toMillis(this.refreshTokenExpires))).build();
+		return authenticationResponse;
+	}
+
+	public Date calculateExpiryDate(Long millieSeconds) {
+		Long time = new Date().getTime() + millieSeconds;
+		return new Date(time);
 	}
 
 	public String generateAccessToken(UUID id, User user) {

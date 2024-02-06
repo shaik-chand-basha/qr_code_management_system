@@ -1,13 +1,16 @@
 package csi.attendence.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -22,6 +25,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "authentication_details")
 @Data
 @EqualsAndHashCode()
+@EntityListeners(AuditingEntityListener.class)
 public class AuthenticationInfo {
 
 	@Id
@@ -43,12 +47,14 @@ public class AuthenticationInfo {
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false, name = "created_at")
-	private Date createdAt;
+	private LocalDateTime createdAt;
 
 
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
-	private Date lastModifiedAt;
+	private LocalDateTime lastModifiedAt;
+	
+
 
 }

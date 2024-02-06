@@ -10,24 +10,34 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import csi.attendence.filter.JwtTokenValidatorFilter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-
 @Configuration
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
 
+	private final JwtTokenValidatorFilter jwtTokenValidatorFilter;
+
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-//		http.formLogin(fl -> fl.disable());
+		http.csrf(x -> x.disable());
+		http.authorizeHttpRequests(r -> {
+			r.requestMatchers("/api/v1/login", "/api/v1/refresh-token").permitAll();
+			r.anyRequest().authenticated();
+
+		});
+		http.formLogin(fl -> fl.disable());
 //		http.authorizeHttpRequests(x->x.anyRequest().authenticated());
 		http.httpBasic(t -> {
 			t.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint());
@@ -35,17 +45,15 @@ public class SpringSecurityConfig {
 		http.sessionManagement(sm -> {
 			sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		});
-		http.csrf(x->x.disable());
 		http.rememberMe(rem -> {
 			rem.disable();
 		});
-
-        http.headers(headers -> headers.frameOptions(x -> {
-            x.sameOrigin();
-        }));
+		http.addFilterBefore(jwtTokenValidatorFilter, UsernamePasswordAuthenticationFilter.class);
+		http.headers(headers -> headers.frameOptions(x -> {
+			x.sameOrigin();
+		}));
 		return http.build();
 	}
-	
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
@@ -60,7 +68,6 @@ public class SpringSecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-
 
 }
 

@@ -13,10 +13,11 @@ public class AuthenticationResponse {
 
 	private String refreshToken;
 
-	private Long expiresAt;
+	private Date expiresAt;
 
-	private Date createdAt;
+	private Date refreshTokenExpiresAt;
 
 	private String type;
 
+	
 }

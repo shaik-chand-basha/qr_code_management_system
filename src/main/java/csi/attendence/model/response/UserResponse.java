@@ -1,5 +1,6 @@
 package csi.attendence.model.response;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -29,10 +30,10 @@ public class UserResponse {
 
 	private UserInfoResponse createdBy;
 
-	private Date createdAt;
+	private LocalDateTime createdAt;
 
 	private UserInfoResponse lastModifiedBy;
 
-	private Date lastModifiedAt;
+	private LocalDateTime lastModifiedAt;
 
 }

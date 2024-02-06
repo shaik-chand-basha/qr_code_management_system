@@ -1,6 +1,7 @@
 package csi.attendence.entity;
 
 import java.sql.Types;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -22,6 +24,7 @@ import csi.attendence.enums.GenderEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -42,6 +45,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @Table(name = "user_info")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -97,12 +101,12 @@ public class User implements UserDetails {
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false)
-	private Date createdAt;
+	private LocalDateTime createdAt;
 
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
-	private Date lastModifiedAt;
+	private LocalDateTime lastModifiedAt;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -124,18 +128,18 @@ public class User implements UserDetails {
 	@Override
 	public boolean isAccountNonExpired() {
 
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
 
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return true;
 	}
 
 	@Override

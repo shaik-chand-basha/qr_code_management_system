@@ -1,18 +1,18 @@
 package csi.attendence.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
 	@CreatedBy
@@ -36,7 +37,7 @@ public class BaseEntity {
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false, nullable = false, name = "created_at")
-	private Date createdAt;
+	private LocalDateTime createdAt;
 
 	@LastModifiedBy
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -47,6 +48,6 @@ public class BaseEntity {
 	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
-	private Date lastModifiedAt;
+	private LocalDateTime lastModifiedAt;
 
 }

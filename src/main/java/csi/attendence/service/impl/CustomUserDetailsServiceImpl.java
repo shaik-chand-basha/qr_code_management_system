@@ -3,6 +3,7 @@ package csi.attendence.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,7 @@ import csi.attendence.entity.ImageMetadata;
 import csi.attendence.entity.StudentInfo;
 import csi.attendence.entity.User;
 import csi.attendence.entity.UserRole;
+import csi.attendence.enums.LoginType;
 import csi.attendence.exceptions.AlreadyExistsException;
 import csi.attendence.exceptions.BadRequestException;
 import csi.attendence.listener.events.OnRegisterUserEvent;
@@ -36,11 +38,15 @@ import csi.attendence.repository.UserroleRepository;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.utils.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Getter
+@Setter
 public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final UserRepository userRepository;
@@ -84,7 +90,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		StudentInfo requestedStudent = StudentMapper.mapToStudentInfo(request, new StudentInfo());
 		UserRequest userRequest = request.getUserInfo();
 		checkStudentExistence(requestedStudent);
-		User savedUser = saveUser(userRequest,siteUrl);
+		User savedUser = saveUser(userRequest, siteUrl);
 		requestedStudent.setUser(savedUser);
 		if (userAdmin) {
 			requestedStudent.setApproved(true);
@@ -94,7 +100,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		}
 		StudentInfo savedStudentInfo = this.studentRepository.saveAndFlush(requestedStudent);
 		StudentInfo studentInfo = this.studentRepository.findById(savedStudentInfo.getId()).orElse(null);
-		
+
 		return StudentMapper.mapToStudentResponse(studentInfo, new StudentResponse());
 	}
 
@@ -114,7 +120,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	}
 
 	@Override
-	public User saveUser(UserRequest request,String siteURL) {
+	public User saveUser(UserRequest request, String siteURL) {
 
 		if (request == null) {
 			throw new BadRequestException("userinfo should not be empty.");
@@ -161,6 +167,56 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	}
 
+	@Override
+	public User findUserByCredentials(String authorizationHeader, LoginType loginType) {
+		if (Strings.isBlank(authorizationHeader)) {
+			throw new BadRequestException();
+		}
+
+		String decodedHeader = Base64.getDecoder().decode(authorizationHeader).toString().substring(7);
+		User user = null;
+		String username = decodedHeader.split(":")[0];
+		String password = decodedHeader.split(":")[1];
+		if (LoginType.EMAIL.equals(loginType)) {
+			user = this.userRepository.findByEmailAndActive(username)
+					.orElseThrow(() -> new UsernameNotFoundException("username not found"));
+		} else if (LoginType.HALLTICKET_NUMBER.equals(loginType)) {
+			user = this.userRepository.findByHallticketNumber(Long.parseLong(username))
+					.orElseThrow(() -> new UsernameNotFoundException("username not found"));
+		} else if (LoginType.MOBILE_NUMBER.equals(loginType)) {
+			user = this.userRepository.findByMobileNumberAndActiveTrue(username)
+					.orElseThrow(() -> new UsernameNotFoundException("username not found"));
+		} else {
+			throw new BadRequestException();
+		}
+		if (user == null) {
+			throw new UsernameNotFoundException("username not found");
+		}
+		boolean matches = passwordEncoder.matches(password, user.getPassword());
+		if (matches) {
+			return user;
+		}
+		throw new BadRequestException();
+	}
+
+	public User findUserByCredentials(String username) {
+		if (Strings.isBlank(username)) {
+			throw new UsernameNotFoundException("username should not be empty.");
+		}
+		User user = null;
+		user = this.userRepository.findByEmailAndActive(username).orElse(null);
+		if (user == null) {
+			user = this.userRepository.findByMobileNumberAndActiveTrue(username).orElse(null);
+		}
+		if (user == null) {
+
+			user = this.userRepository.findByHallticketNumber(Long.parseLong(username)).orElse(null);
+		}
+	
+		return user;
+
+	}
+
 	void checkUserExistance(UserRequest request) {
 
 		boolean existsByEmail = this.userRepository.existsByEmail(request.getEmail());
@@ -178,14 +234,8 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
-		if (Strings.isBlank(username)) {
-			throw new UsernameNotFoundException("username should not be empty.");
-		}
-//		String usernameNotFoundMessage = String.format("user with username: %s not found.", username);
-//		User user = this.userRepository.findUserByEmailOrMobileNumberOrUsername(username)
-//				.orElseThrow(() -> new UsernameNotFoundException(usernameNotFoundMessage));
-//		return null;
-		return null;
+		return findUserByCredentials(username);
+
 	}
 
 }
