@@ -6,11 +6,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import csi.attendence.enums.TokenType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -34,18 +31,13 @@ public class AuthenticationInfo {
 
 	private String token;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "token_type", columnDefinition = "ENUM('ACCESS_TOKEN', 'REFRESH_TOKEN')", nullable = false)
-	private TokenType tokenType;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date expiresAt;
-
+	private String refreshToken;
+	
 	private Boolean active;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_user_id", nullable = true, updatable = false)
-	private User fkUserId;
+	private User user;
 	
 	
 	@CreatedDate

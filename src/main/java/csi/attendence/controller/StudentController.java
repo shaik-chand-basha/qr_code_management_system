@@ -33,6 +33,7 @@ public class StudentController {
 	@PostMapping(path = "/student/register")
 	public ResponseEntity<StudentResponse> registerStudent(
 			@Validated(OnCreate.class) @Valid @RequestBody StudentRequest studentInfo,HttpServletRequest request) {
+		System.out.println("Student called");
 		System.out.println(studentInfo.getYearOfJoin());
 		StudentResponse saveStudent = customUserDetailsService.saveStudent(studentInfo,UrlUtils.getSiteURL(request));
 

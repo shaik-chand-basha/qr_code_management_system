@@ -8,6 +8,7 @@ class QrCodeStudentAttendenceManagementSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

@@ -1,12 +1,17 @@
 server:
-  port: 8000
-
+  port: 8001
+  error:
+    path: /error
 application: 
   image:
     folder_path: C:\\qr_code_management_system\\resource
   email_verification:
     expires: 60
-  
+  security:
+    jwt:
+      secret_key: b1ad4d5b83cae5f7e11d7c2368e641c7bc7f6d65f9a4dfb593b663460fdd616d
+      token_expires: 1
+      refresh_token_expires: 60
 spring:
   application:
     name: Aurora-QR-Code-base-Attendence-Management-System

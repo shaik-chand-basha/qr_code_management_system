@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "csi.attendence")
 @EnableJpaAuditing(auditorAwareRef = "AuditorAwareImpl", dateTimeProviderRef = "auditingDateTimeProvider")
 public class QrCodeStudentAttendenceManagementSystemApplication {
 

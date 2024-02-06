@@ -28,6 +28,7 @@ public class SpringSecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 //		http.formLogin(fl -> fl.disable());
+//		http.authorizeHttpRequests(x->x.anyRequest().authenticated());
 		http.httpBasic(t -> {
 			t.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint());
 		});

@@ -181,8 +181,8 @@ CREATE TABLE event_photos (
 CREATE TABLE authentication_details (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     token VARCHAR(500) NOT NULL,
-    token_type ENUM('ACCESS_TOKEN', 'REFRESH_TOKEN') NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
+	
+    refresh_token varchar(500) not null,
     active BIT NOT NULL,
     created_at TIMESTAMP,
     last_modified_at TIMESTAMP,
