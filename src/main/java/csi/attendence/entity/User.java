@@ -2,6 +2,7 @@ package csi.attendence.entity;
 
 import java.sql.Types;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -65,21 +67,21 @@ public class User implements UserDetails {
 //	@JdbcTypeCode(Types.E)
 	private GenderEnum gender;
 
-
 	private String password;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_profile")
 	private ImageMetadata fkProfile;
 
-	@ManyToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
 	@Fetch(FetchMode.JOIN)
+	@JoinTable(name = "user_info_role", inverseJoinColumns = @JoinColumn(name = "fk_role_id", referencedColumnName = "role_id"), joinColumns = @JoinColumn(name = "fk_user_id", referencedColumnName = "user_id"))
 	private List<UserRole> roles;
 
 	private String email;
 
 	private String mobileNumber;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date dob;
 
@@ -87,13 +89,13 @@ public class User implements UserDetails {
 	private Boolean active;
 
 	@CreatedBy
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "created_by", nullable = true, updatable = false)
 	private User createdBy;
 
 	@LastModifiedBy
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.JOIN)
 	@JoinColumn(name = "last_modified_by", nullable = true)
 	private User lastModifiedBy;

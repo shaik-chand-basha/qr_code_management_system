@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 public class BaseEntity {
 
 	@CreatedBy
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "created_by", nullable = false, updatable = false)
 	private User createdBy;
@@ -40,7 +40,7 @@ public class BaseEntity {
 	private LocalDateTime createdAt;
 
 	@LastModifiedBy
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
 	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "last_modified_by", nullable = true,insertable = false,updatable = true)
 	private User lastModifiedBy;

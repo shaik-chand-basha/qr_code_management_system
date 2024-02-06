@@ -1,5 +1,6 @@
 package csi.attendence.model.mapper;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public class UserMapper {
 		Optional.ofNullable(request.getPassword()).ifPresent(user::setPassword);
 		Optional.ofNullable(request.getEmail()).ifPresent(user::setEmail);
 		Optional.ofNullable(request.getMobileNumber()).ifPresent(user::setMobileNumber);
+
 		return user;
 	}
 
@@ -52,7 +54,10 @@ public class UserMapper {
 		response.setCreatedAt(user.getCreatedAt());
 		response.setLastModifiedBy(toUserInfoResponse(user.getLastModifiedBy()));
 		response.setLastModifiedAt(user.getLastModifiedAt());
-
+		if (!(user.getRoles() == null || user.getRoles().isEmpty())) {
+			List<String> roles = user.getRoles().stream().map(x -> x.getRole()).collect(Collectors.toList());
+			response.setRoles(roles);
+		}
 		return response;
 	}
 

@@ -2,11 +2,14 @@ package csi.attendence.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -32,14 +35,7 @@ public class UserRole implements GrantedAuthority {
 	@Column(name="user_role")
 	private String role;
 
-	@ManyToMany
-    @JoinTable(
-        name="user_info_role",
-        joinColumns=
-            @JoinColumn(name="fk_role_id", referencedColumnName="role_id"),
-        inverseJoinColumns=
-            @JoinColumn(name="fk_user_id", referencedColumnName="user_id")
-    )
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "roles")
 	private List<User> user;
 
 	@Override

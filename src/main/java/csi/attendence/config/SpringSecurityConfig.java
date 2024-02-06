@@ -33,9 +33,8 @@ public class SpringSecurityConfig {
 
 		http.csrf(x -> x.disable());
 		http.authorizeHttpRequests(r -> {
-			r.requestMatchers("/api/v1/login", "/api/v1/refresh-token").permitAll();
-			r.anyRequest().authenticated();
-
+			r.requestMatchers("/api/v1/login", "/api/v1/refresh-token","/api/v1/student/register","/verify-email","/api/v1/me").permitAll();
+			r.requestMatchers("/api/me","/api/user/**").authenticated();
 		});
 		http.formLogin(fl -> fl.disable());
 //		http.authorizeHttpRequests(x->x.anyRequest().authenticated());

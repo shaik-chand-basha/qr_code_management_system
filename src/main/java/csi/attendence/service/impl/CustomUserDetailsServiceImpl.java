@@ -133,7 +133,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		boolean userAdmin = AuthenticationUtils.isUserAdmin(loggedInUser);
 
 		User requestedUser = UserMapper.mapToUser(request, new User());
-
+		requestedUser.setActive(true);
 		requestedUser.setPassword(passwordEncoder.encode(requestedUser.getPassword()));
 
 		List<UserRole> roles = userroleRepository.findByRoleIn(request.getRoles());

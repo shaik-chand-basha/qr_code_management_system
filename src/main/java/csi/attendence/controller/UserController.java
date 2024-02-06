@@ -40,6 +40,7 @@ public class UserController {
 	
 	@PostMapping("/me")
 	public ResponseEntity<UserResponse> me(Authentication authentication) {
+		System.out.println("me");
 		User user = (User) authentication.getPrincipal();
 		UserResponse userResponse = UserMapper.mapToUserResponse(user, null);
 		return ResponseEntity.ok(userResponse);
