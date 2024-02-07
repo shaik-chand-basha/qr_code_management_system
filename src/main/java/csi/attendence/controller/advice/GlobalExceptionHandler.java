@@ -34,38 +34,37 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AlreadyExistsException.class)
 	public ResponseEntity<ErrorResponse> handleAlreadyExistsException(AlreadyExistsException ex, WebRequest request) {
 
-		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage()).message(ex.getMessage())
-				.path(request.getDescription(false).replace("uri=", "")).build();
+		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage())
+				.message(ex.getMessage()).path(request.getDescription(false).replace("uri=", "")).build();
 
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
-	
+
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
 
-		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage()).message(ex.getMessage())
-				.path(request.getDescription(false).replace("uri=", "")).build();
+		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage())
+				.message(ex.getMessage()).path(request.getDescription(false).replace("uri=", "")).build();
 
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
-	
+
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex, WebRequest request) {
 
-		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage()).message(ex.getMessage())
-				.path(request.getDescription(false).replace("uri=", "")).build();
+		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage())
+				.message(ex.getMessage()).path(request.getDescription(false).replace("uri=", "")).build();
 
 		return ResponseEntity.badRequest().body(errorResponse);
 	}
-	
+
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex, WebRequest request) {
-
-		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage()).message(ex.getMessage())
-				.path(request.getDescription(false).replace("uri=", "")).build();
+		ex.printStackTrace();
+		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage())
+				.message(ex.getMessage()).path(request.getDescription(false).replace("uri=", "")).build();
 
 		return ResponseEntity.internalServerError().body(errorResponse);
 	}
-
 
 }

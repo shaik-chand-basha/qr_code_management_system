@@ -3,6 +3,9 @@ package csi.attendence.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import csi.attendence.entity.ImageMetadata;
 import csi.attendence.entity.StudentInfo;
+import csi.attendence.entity.TokenValidations;
 import csi.attendence.entity.User;
 import csi.attendence.entity.UserRole;
 import csi.attendence.enums.LoginType;
@@ -30,17 +34,22 @@ import csi.attendence.exceptions.BadRequestException;
 import csi.attendence.listener.events.OnRegisterUserEvent;
 import csi.attendence.model.mapper.StudentMapper;
 import csi.attendence.model.mapper.UserMapper;
+import csi.attendence.model.request.PasswordResetFinalRequest;
+import csi.attendence.model.request.PasswordResetRequest;
 import csi.attendence.model.request.StudentRequest;
 import csi.attendence.model.request.UserRequest;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.StudentResponse;
+import csi.attendence.repository.AuthenticationRepository;
 import csi.attendence.repository.ImageMetadataRepository;
 import csi.attendence.repository.StudentRepository;
+import csi.attendence.repository.TokenValidationsRepository;
 import csi.attendence.repository.UserRepository;
 import csi.attendence.repository.UserroleRepository;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.utils.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -60,7 +69,13 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final UserroleRepository userroleRepository;
 
+	private final TokenValidationsRepository tokenValidationsRepository;
+	
+	private final AuthenticationRepository authenticationRepository;
+
 	private final PasswordEncoder passwordEncoder;
+
+	private final EmailServiceImpl emailService;
 
 	private final EntityManager em;
 
@@ -68,6 +83,29 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	@Value("${application.image.folder_path}")
 	private String imageFolderPath;
+
+	@Override
+	public ApiResponse passwordChange(PasswordResetFinalRequest request) {
+		if (request == null || Strings.isBlank(request.getPassword())) {
+			throw new BadRequestException("Invalid password");
+		}
+		TokenValidations tokenValidations = this.tokenValidationsRepository
+				.findByTokenAndActive(request.getVerificationCode(), true)
+				.orElseThrow(() -> new BadRequestException("Invalid verification code"));
+		
+		if (tokenValidations.getTokenExpires().before(new Date())) {
+			throw new RuntimeException("token is expired");
+		}
+		User user = tokenValidations.getUser();
+		user.setPassword(this.passwordEncoder.encode(request.getPassword()));
+		this.userRepository.save(user);
+		this.tokenValidationsRepository.deleteByUser(user);
+		this.authenticationRepository.deleteByUser(user);
+		ApiResponse response = ApiResponse.builder().status(HttpStatus.OK).message("password reset successfully")
+				.build();
+
+		return response;
+	}
 
 	@Override
 	public StudentResponse findStudent(Long id) {
@@ -154,7 +192,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	@Override
 	public ApiResponse updateProfileImage(MultipartFile file) {
 		User loggedInUser = AuthenticationUtils.getLoggedInUser();
-		if(loggedInUser == null) {
+		if (loggedInUser == null) {
 			throw new BadCredentialsException("Authentication required");
 		}
 		User user = this.userRepository.findById(loggedInUser.getUserId()).orElse(null);
@@ -225,6 +263,25 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 			return user;
 		}
 		throw new BadRequestException();
+	}
+
+	@Override
+	public ApiResponse resetPassoword(PasswordResetRequest request, HttpServletRequest httpServletRequest) {
+		User user = this.userRepository.findByEmailAndActive(request.getEmail())
+				.orElseThrow(() -> new UsernameNotFoundException("user not found"));
+
+		LocalDate userDOB = convertToLocalDateViaInstant(user.getDob());
+		boolean dobEquals = request.getDob().isEqual(userDOB);
+		if (!dobEquals) {
+			throw new BadRequestException();
+		}
+		this.emailService.passwordReset(user, httpServletRequest);
+		return ApiResponse.builder().status(HttpStatus.OK).message("Password reset email sent successfully").build();
+	}
+
+	public LocalDate convertToLocalDateViaInstant(Date date) {
+		LocalDate localDate = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+		return localDate;
 	}
 
 	public User findUserByCredentials(String username) {

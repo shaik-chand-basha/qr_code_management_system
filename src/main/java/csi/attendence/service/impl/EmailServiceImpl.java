@@ -1,24 +1,28 @@
 package csi.attendence.service.impl;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import csi.attendence.entity.EmailVerification;
+import csi.attendence.entity.TokenValidations;
 import csi.attendence.entity.User;
 import csi.attendence.exceptions.BadRequestException;
 import csi.attendence.exceptions.EmailVerificationExpiredException;
 import csi.attendence.repository.EmailRepository;
+import csi.attendence.repository.TokenValidationsRepository;
+import csi.attendence.utils.UrlUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -35,17 +39,53 @@ public class EmailServiceImpl {
 
 	private final EmailRepository emailRepository;
 
+	private final TokenValidationsRepository tokenValidationsRepository;
+
 	private final JavaMailSender mailSender;
 
 	@Value("${application.email_verification.expires}")
 	private Integer expireMinutes;
 
+	public void passwordReset(User user, HttpServletRequest httpServletRequest) {
+
+		TokenValidations tokenValidations = new TokenValidations();
+		tokenValidations.setActive(true);
+		tokenValidations.setToken(buildToken());
+		tokenValidations.setUser(user);
+		tokenValidations.setTokenExpires(calculateExpiryDate(60));
+		this.tokenValidationsRepository.deleteByUser(user);
+		this.tokenValidationsRepository.save(tokenValidations);
+
+		try {
+			sendPasswordResetEmail(user, UrlUtils.getSiteURL(httpServletRequest), tokenValidations.getToken());
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void validateResetPasswordVerificationCode(String code) {
+		if (Strings.isBlank(code)) {
+			throw new BadRequestException("Valid code is required");
+		}
+		TokenValidations tokenValidations = this.tokenValidationsRepository.findByTokenAndActive(code,true)
+				.orElseThrow(() -> new RuntimeException());
+
+		if (tokenValidations.getTokenExpires().before(new Date())) {
+			throw new RuntimeException("token is expired");
+		}
+		this.tokenValidationsRepository.save(tokenValidations);
+	}
+
 	public void validateEmailVerificationCode(String code) {
 		if (Strings.isBlank(code)) {
 			throw new BadRequestException("Valid code is required");
 		}
+
 		EmailVerification emailVerification = this.emailRepository.findByToken(code)
 				.orElseThrow(() -> new EmailVerificationExpiredException());
+		if (emailVerification.getExpiryDate().before(new Date())) {
+			throw new RuntimeException("token is expired");
+		}
 		emailVerification.setActive(false);
 		emailVerification.setEmailVerified(true);
 		this.emailRepository.save(emailVerification);
@@ -73,12 +113,47 @@ public class EmailServiceImpl {
 		}
 	}
 
+	public static Date calculateExpiryDate(int expiryTimeInMinutes) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Timestamp(cal.getTime().getTime()));
+		cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+		return new Date(cal.getTime().getTime());
+	}
+
 	private static String buildToken() {
 		String randomString = UUID.randomUUID().toString();
 //		String time = "" + new Date().getTime();
 
 //		String randomTime = Base64.getEncoder().encode(time.getBytes()).toString();
 		return randomString;
+	}
+
+	private void sendPasswordResetEmail(User user, String siteURL, String verificationCode)
+			throws MessagingException, UnsupportedEncodingException {
+		String toAddress = user.getEmail();
+		String fromAddress = sender;
+		String senderName = companyName;
+		String subject = "Password Reset Email for Qr Based Attendence Management System";
+		String content = emailTemplateForVerification;
+
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom(fromAddress, senderName);
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+
+		content = content.replace("{{USER_NAME}}", user.getFirstName());
+		content = content.replace("{{EMAIL_ADDRESS}}", user.getEmail());
+		content = content.replace("{{COMPANY_NAME}}", companyName);
+		String verifyURL = siteURL + "/reset-password?code=" + verificationCode;
+
+		content = content.replace("{{VERIFICATION_URL}}", verifyURL);
+
+		helper.setText(content, true);
+
+		mailSender.send(message);
+
 	}
 
 	private void sendVerificationEmail(User user, String siteURL, String verificationCode)

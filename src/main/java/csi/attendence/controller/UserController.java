@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,13 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import csi.attendence.entity.User;
 import csi.attendence.model.mapper.UserMapper;
+import csi.attendence.model.request.PasswordResetRequest;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.AuthenticationResponse;
-import csi.attendence.model.response.StudentResponse;
 import csi.attendence.model.response.UserResponse;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.service.impl.JwtAuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -62,6 +64,14 @@ public class UserController {
 		AuthenticationResponse authenticationInfo = authenticationService
 				.generateAuthenticationInfoByRefreshToken(refreshTokenHeader);
 		return ResponseEntity.ok(authenticationInfo);
+	}
+
+	@PostMapping("/user/reset-password")
+	public ResponseEntity<ApiResponse> passwordReset(@Valid @RequestBody PasswordResetRequest passwordResetRequest,
+			HttpServletRequest request) {
+
+		ApiResponse apiResponse = this.customUserDetailsService.resetPassoword(passwordResetRequest, request);
+		return ResponseEntity.ok(apiResponse);
 	}
 
 }
