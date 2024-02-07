@@ -7,6 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.validation.annotation.Validated;
 
 import csi.attendence.entity.User;
+import csi.attendence.model.response.UserInfoResponse;
+
+import java.util.List;
+import java.util.Date;
+
 
 @Validated
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -26,5 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	boolean existsByEmail(String email);
 
 	boolean existsByMobileNumber(String mobile_number);
+	
+	@Query("SELECT new csi.attendence.model.response.UserInfoResponse(u.userId,u.fkProfile.pathToImage,u.firstName,u.lastName) From User as u left join u.fkProfile where u.firstName=:firstName and u.dob=:dob")
+	List<UserInfoResponse> findUserByFirstNameAndDob(String firstName, Date dob);
 
 }

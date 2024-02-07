@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import csi.attendence.constraints.OnCreate;
 import csi.attendence.constraints.OnUpdate;
+import csi.attendence.constraints.OnUserSearch;
 import csi.attendence.enums.GenderEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +23,7 @@ public class UserRequest {
 
 	private Long userId;
 
-	@NotBlank(groups = { OnCreate.class })
+	@NotBlank(groups = { OnCreate.class,OnUserSearch.class })
 	private String firstName;
 
 	private String lastName;
@@ -30,8 +31,8 @@ public class UserRequest {
 	@NotNull(groups = { OnCreate.class })
 	private GenderEnum gender;
 
-	@NotNull(groups = { OnCreate.class })
-	@Past(groups = { OnCreate.class,OnUpdate.class })
+	@NotNull(groups = { OnCreate.class,OnUserSearch.class })
+	@Past(groups = { OnCreate.class,OnUpdate.class,OnUserSearch.class })
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dob;
 	

@@ -1,8 +1,11 @@
 package csi.attendence.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import csi.attendence.constraints.OnUserSearch;
 import csi.attendence.entity.User;
 import csi.attendence.model.mapper.UserMapper;
 import csi.attendence.model.request.PasswordResetRequest;
+import csi.attendence.model.request.UserRequest;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.AuthenticationResponse;
+import csi.attendence.model.response.UserInfoResponse;
 import csi.attendence.model.response.UserResponse;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.service.impl.JwtAuthenticationServiceImpl;
@@ -72,6 +78,13 @@ public class UserController {
 
 		ApiResponse apiResponse = this.customUserDetailsService.resetPassoword(passwordResetRequest, request);
 		return ResponseEntity.ok(apiResponse);
+	}
+
+	@PostMapping("/search/user")
+	public ResponseEntity<List<UserInfoResponse>> findEmailByDobAndName(
+			@Validated(OnUserSearch.class) @Valid @RequestBody UserRequest request) {
+		List<UserInfoResponse> list = this.customUserDetailsService.findUsersByFirstNameAndLastName(request);
+		return ResponseEntity.ok(list);
 	}
 
 }

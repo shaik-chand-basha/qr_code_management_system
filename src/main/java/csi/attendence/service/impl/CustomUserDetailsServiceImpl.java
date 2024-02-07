@@ -40,6 +40,7 @@ import csi.attendence.model.request.StudentRequest;
 import csi.attendence.model.request.UserRequest;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.StudentResponse;
+import csi.attendence.model.response.UserInfoResponse;
 import csi.attendence.repository.AuthenticationRepository;
 import csi.attendence.repository.ImageMetadataRepository;
 import csi.attendence.repository.StudentRepository;
@@ -84,6 +85,14 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 	@Value("${application.image.folder_path}")
 	private String imageFolderPath;
 
+	
+	
+	@Override
+	public List<UserInfoResponse> findUsersByFirstNameAndLastName(UserRequest request){
+		List<UserInfoResponse> list = this.userRepository.findUserByFirstNameAndDob(request.getFirstName(), request.getDob());
+		return list;
+	}
+	
 	@Override
 	public ApiResponse passwordChange(PasswordResetFinalRequest request) {
 		if (request == null || Strings.isBlank(request.getPassword())) {
