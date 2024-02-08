@@ -96,7 +96,7 @@ CREATE TABLE student_details (
 
 
 CREATE TABLE event_info (
-    event_id BIGINT PRIMARY KEY,
+    event_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(100),
     description LONGTEXT,
     starting_date DATE,

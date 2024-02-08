@@ -1,6 +1,7 @@
 package csi.attendence.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,7 +26,7 @@ public class EventInfo extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
-	@Column(name= "event_id")
+	@Column(name = "event_id")
 	private Long eventId;
 
 	private String title;
@@ -39,10 +40,10 @@ public class EventInfo extends BaseEntity {
 	private Boolean active;
 
 	@Temporal(TemporalType.DATE)
-	private Date startingDate;
+	private LocalDate startingDate;
 
 	@Temporal(TemporalType.DATE)
-	private Date endingDate;
+	private LocalDate endingDate;
 
 	@ManyToOne
 	@JoinColumn(name = "fk_profile")

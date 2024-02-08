@@ -22,6 +22,6 @@ public class OnRegisterUserEventListener {
 	public void onRegisterUserComplete(OnRegisterUserEvent event) {
 
 		this.emailService.sendVerificationEmailToUser(event.getUser(), event.getSiteURL());
-	}
 
+	}
 }

@@ -1,19 +1,14 @@
 package csi.attendence.service.impl;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,7 +37,6 @@ import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.StudentResponse;
 import csi.attendence.model.response.UserInfoResponse;
 import csi.attendence.repository.AuthenticationRepository;
-import csi.attendence.repository.ImageMetadataRepository;
 import csi.attendence.repository.StudentRepository;
 import csi.attendence.repository.TokenValidationsRepository;
 import csi.attendence.repository.UserRepository;
@@ -66,12 +60,12 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final StudentRepository studentRepository;
 
-	private final ImageMetadataRepository imageRepository;
+	private final ImageMetadataServiceImpl imageMetadataService;
 
 	private final UserroleRepository userroleRepository;
 
 	private final TokenValidationsRepository tokenValidationsRepository;
-	
+
 	private final AuthenticationRepository authenticationRepository;
 
 	private final PasswordEncoder passwordEncoder;
@@ -82,17 +76,13 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final ApplicationEventPublisher applicationEventPublisher;
 
-	@Value("${application.image.folder_path}")
-	private String imageFolderPath;
-
-	
-	
 	@Override
-	public List<UserInfoResponse> findUsersByFirstNameAndLastName(UserRequest request){
-		List<UserInfoResponse> list = this.userRepository.findUserByFirstNameAndDob(request.getFirstName(), request.getDob());
+	public List<UserInfoResponse> findUsersByFirstNameAndLastName(UserRequest request) {
+		List<UserInfoResponse> list = this.userRepository.findUserByFirstNameAndDob(request.getFirstName(),
+				request.getDob());
 		return list;
 	}
-	
+
 	@Override
 	public ApiResponse passwordChange(PasswordResetFinalRequest request) {
 		if (request == null || Strings.isBlank(request.getPassword())) {
@@ -101,7 +91,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		TokenValidations tokenValidations = this.tokenValidationsRepository
 				.findByTokenAndActive(request.getVerificationCode(), true)
 				.orElseThrow(() -> new BadRequestException("Invalid verification code"));
-		
+
 		if (tokenValidations.getTokenExpires().before(new Date())) {
 			throw new RuntimeException("token is expired");
 		}
@@ -207,7 +197,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		User user = this.userRepository.findById(loggedInUser.getUserId()).orElse(null);
 
 		try {
-			ImageMetadata imageMetadata = saveImageMetadata(file);
+			ImageMetadata imageMetadata = imageMetadataService.saveImageMetadata(file);
 			user.setFkProfile(imageMetadata);
 			User savedUser = this.userRepository.save(user);
 			ApiResponse apiResponse = ApiResponse.builder().message(imageMetadata.getPathToImage())
@@ -221,25 +211,6 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public ImageMetadata saveImageMetadata(MultipartFile imageFile) throws IllegalStateException, IOException {
-		if (imageFile == null || imageFile.isEmpty()) {
-			return null;
-		}
-		String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
-
-		String randomFileName = UUID.randomUUID().toString().replace("-", "");
-		String fileName = "%s%d.%s".formatted(randomFileName, new Date().getTime(), extension);
-		File destinationFile = Path.of(imageFolderPath, fileName).toFile();
-
-		imageFile.transferTo(destinationFile);
-		ImageMetadata imageToSave = new ImageMetadata();
-		imageToSave.setImageType(imageFile.getContentType());
-		imageToSave.setPathToImage(destinationFile.getAbsolutePath());
-		ImageMetadata savedImage = imageRepository.save(imageToSave);
-		return savedImage;
-
 	}
 
 	@Override

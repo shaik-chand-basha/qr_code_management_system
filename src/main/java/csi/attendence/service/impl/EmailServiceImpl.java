@@ -23,12 +23,14 @@ import csi.attendence.utils.UrlUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Data
 @RequiredArgsConstructor
+@Transactional
 public class EmailServiceImpl {
 
 	@Value("${spring.mail.username}")

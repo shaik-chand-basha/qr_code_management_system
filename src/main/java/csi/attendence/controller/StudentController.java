@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import csi.attendence.constraints.OnCreate;
+import csi.attendence.constraints.groups.OnCreate;
 import csi.attendence.model.request.StudentRequest;
 import csi.attendence.model.response.StudentResponse;
 import csi.attendence.service.CustomUserDetailsService;

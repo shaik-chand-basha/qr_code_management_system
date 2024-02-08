@@ -69,7 +69,7 @@ public class User implements UserDetails {
 
 	private String password;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_profile")
 	private ImageMetadata fkProfile;
 
@@ -89,14 +89,14 @@ public class User implements UserDetails {
 	private Boolean active;
 
 	@CreatedBy
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "created_by", nullable = true, updatable = false)
 	private User createdBy;
 
 	@LastModifiedBy
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.JOIN)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@Fetch(FetchMode.SELECT)
 	@JoinColumn(name = "last_modified_by", nullable = true)
 	private User lastModifiedBy;
 

@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import csi.attendence.constraints.OnCreate;
-import csi.attendence.constraints.OnUpdate;
-import csi.attendence.constraints.OnUserSearch;
+import csi.attendence.constraints.groups.OnCreate;
+import csi.attendence.constraints.groups.OnUpdate;
+import csi.attendence.constraints.groups.OnUserSearch;
 import csi.attendence.enums.GenderEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

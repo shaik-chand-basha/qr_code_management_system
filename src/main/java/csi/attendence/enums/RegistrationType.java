@@ -2,5 +2,5 @@ package csi.attendence.enums;
 
 public enum RegistrationType {
 
-	USER, STUDENT, GUEST
+	USER, STUDENT, GUEST,SELF
 }

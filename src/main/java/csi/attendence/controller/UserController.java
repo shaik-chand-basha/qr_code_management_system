@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import csi.attendence.constraints.OnUserSearch;
+import csi.attendence.constraints.groups.OnUserSearch;
 import csi.attendence.entity.User;
 import csi.attendence.model.mapper.UserMapper;
 import csi.attendence.model.request.PasswordResetRequest;
