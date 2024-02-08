@@ -9,5 +9,9 @@ public class AlreadyExistsException extends RuntimeException {
 	public AlreadyExistsException(String className, String property, String value) {
 		super("%s  with %s: %s already exists.".formatted(className, property, value));
 	}
+	
+	public AlreadyExistsException(String message) {
+		super(message);
+	}
 
 }

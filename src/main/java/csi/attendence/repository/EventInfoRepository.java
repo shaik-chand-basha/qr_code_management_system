@@ -8,4 +8,5 @@ import csi.attendence.entity.EventInfo;
 @Repository
 public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
 
+
 }

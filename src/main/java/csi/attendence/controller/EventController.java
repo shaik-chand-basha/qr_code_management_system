@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import csi.attendence.constraints.groups.OnCreate;
-import csi.attendence.enums.RegistrationType;
 import csi.attendence.model.request.EventRequest;
+import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.EventInfoResponse;
 import csi.attendence.service.impl.EventServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,21 +42,30 @@ public class EventController {
 		return ResponseEntity.ok(eventInfoResponse);
 	}
 
+	@PostMapping("/{event_id}/register/user/{user_id}")
+	public ResponseEntity<ApiResponse> registerEvent(@Valid @NotNull @PathVariable("event_id") Long eventId,
+			@Valid @NotNull @PathVariable("user_id") Long userId) {
+		ApiResponse apiResponse = this.eventService.registerEvent(eventId, userId);
+		return ResponseEntity.ok(apiResponse);
+	}
+
+	@GetMapping("/user/{user_id}")
+	public Object allEventsRegistered(@PathVariable("event_id") Long evetId, @PathVariable("user_id") Long userId) {
+		return null;
+	}
+
 	@PatchMapping("/{event_id}")
 	public Object updateEvent(@PathVariable("event_id") Long evetId,
 			@RequestParam("eventPhoto") MultipartFile eventPhoto) {
 		return null;
 	}
 
-	@PostMapping("/{event_id}/attendence/{user_id}")
-	public Object takeAttendenceToThisEvent(@PathVariable("event_id") Long evetId,
+	@PostMapping("/{event_id}/attendence/user/{user_id}")
+	public ResponseEntity<ApiResponse> takeAttendenceToThisEvent(@PathVariable("event_id") Long evetId,
 			@PathVariable("user_id") Long userId) {
-		return null;
-	}
 
-	@GetMapping("/user/{user_id}")
-	public Object allEventsRegistered(@PathVariable("event_id") Long evetId, @PathVariable("user_id") Long userId) {
-		return null;
+		ApiResponse apiResponse = this.eventService.takeAttendence(evetId, userId);
+		return ResponseEntity.ok(apiResponse);
 	}
 
 	@PostMapping("/{event_id}/upload_image")
@@ -79,9 +89,4 @@ public class EventController {
 		return null;
 	}
 
-	@PostMapping("/{event_id}/register/{user_id}")
-	public Object registerEvent(@PathVariable("event_id") Long evetId, @PathVariable("user_id") Long userId,
-			@RequestParam(name = "type", required = true) RegistrationType type) {
-		return null;
-	}
 }
