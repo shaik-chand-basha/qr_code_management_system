@@ -51,6 +51,7 @@ public class EventController {
 
 	@GetMapping("/user/{user_id}")
 	public Object allEventsRegistered(@PathVariable("event_id") Long evetId, @PathVariable("user_id") Long userId) {
+		
 		return null;
 	}
 
@@ -68,10 +69,12 @@ public class EventController {
 		return ResponseEntity.ok(apiResponse);
 	}
 
-	@PostMapping("/{event_id}/upload_image")
-	public Object uploadImagesToThisEvent(@PathVariable("event_id") Long evetId,
-			@RequestParam("eventPhotos") List<MultipartFile> eventPhotos) {
-		return null;
+	@PostMapping(path="/{event_id}/upload_image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<ApiResponse> uploadImagesToThisEvent(@PathVariable("event_id") Long evetId,
+			@RequestParam("eventPhotos") @Size(max = 5,min = 1) List<MultipartFile> eventPhotos) {
+
+		ApiResponse apiResponse = this.eventService.uploadImageToEvent(evetId, eventPhotos);
+		return ResponseEntity.ok(apiResponse);
 	}
 
 	@DeleteMapping("/{event_id}")
@@ -79,6 +82,8 @@ public class EventController {
 		return null;
 	}
 
+	
+	
 	@GetMapping("/{event_id}")
 	public Object findAllUsersRegisterdToThisEvent(@PathVariable("event_id") Long evetId) {
 		return null;

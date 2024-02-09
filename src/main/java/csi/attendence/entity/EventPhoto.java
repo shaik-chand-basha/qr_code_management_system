@@ -23,6 +23,10 @@ public class EventPhoto extends BaseEntity {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "fk_event_id")
+	private EventInfo event;
+
+	@ManyToOne
 	@JoinColumn(name = "fk_photo")
 	private ImageMetadata photo;
 

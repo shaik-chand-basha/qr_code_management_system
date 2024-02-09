@@ -196,21 +196,13 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		}
 		User user = this.userRepository.findById(loggedInUser.getUserId()).orElse(null);
 
-		try {
-			ImageMetadata imageMetadata = imageMetadataService.saveImageMetadata(file);
-			user.setFkProfile(imageMetadata);
-			User savedUser = this.userRepository.save(user);
-			ApiResponse apiResponse = ApiResponse.builder().message(imageMetadata.getPathToImage())
-					.status(HttpStatus.OK).build();
-			return apiResponse;
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		ImageMetadata imageMetadata = imageMetadataService.saveImageMetadata(file);
+		user.setFkProfile(imageMetadata);
+		User savedUser = this.userRepository.save(user);
+		ApiResponse apiResponse = ApiResponse.builder().message(imageMetadata.getPathToImage()).status(HttpStatus.OK)
+				.build();
+		return apiResponse;
+
 	}
 
 	@Override
