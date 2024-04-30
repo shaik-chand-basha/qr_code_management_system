@@ -40,6 +40,7 @@ public class EmailServiceImpl {
 	private String companyName;
 
 	private final EmailRepository emailRepository;
+	
 
 	private final TokenValidationsRepository tokenValidationsRepository;
 
@@ -90,6 +91,7 @@ public class EmailServiceImpl {
 		}
 		emailVerification.setActive(false);
 		emailVerification.setEmailVerified(true);
+		
 		this.emailRepository.save(emailVerification);
 	}
 

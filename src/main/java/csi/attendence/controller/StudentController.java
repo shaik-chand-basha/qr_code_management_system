@@ -43,6 +43,9 @@ public class StudentController {
 	@GetMapping("/student/{user_id}")
 	public ResponseEntity<StudentResponse> findStudentById(@PathVariable("user_id") Long id) {
 		StudentResponse studentResponse = this.customUserDetailsService.findStudent(id);
+		if(studentResponse == null) {
+			return ResponseEntity.notFound().build();
+		}
 		return ResponseEntity.ok(studentResponse);
 	}
 }

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/layout :: head}">
+
+	<title>CSI Student Branch Bootstrap Template - Index</title>
+</head>
+
+<body>
+	<div th:replace="~{fragments/layout :: header}"></div>
+
+	<main id="main">
+
+		<!-- ======= Breadcrumbs ======= -->
+		<section id="breadcrumbs" class="breadcrumbs mt-0">
+			<div class="container">
+
+				<nav>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/">Home</a></li>
+						<li class="breadcrumb-item">Registration</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="container">
+				<h4>Register Here</h4>
+				<div class="card">
+					<div class="card-body">
+
+						<form class="row g-3 needs-validation" onsubmit="validateForm(event)">
+							<div class="row g-3 card-title align-items-center">
+								<div class="col-auto">
+									<label for="register-type" class="col-form-label">Registration Type</label>
+								</div>
+								<div class="col-auto">
+									<select name="registrationType" required
+										onchange="hideNotRelevantFields(this.value)" class="form-select  form-select-sm"
+										aria-label="register-type" id="register-type">
+										<option value="student" selected>Student</option>
+										<option value="guest">Guest</option>
+									</select>
+
+								</div>
+
+							</div>
+							<fieldset>
+
+								<div class="row g-3 my-1 needs-validation">
+									<div class="col-md-4">
+										<label for="firstName" class="form-label">First name</label>
+										<input type="text" name="firstName" class="form-control" id="firstName"
+											required>
+										<div class="invalid-feedback"></div>
+
+									</div>
+									<div class="col-md-4">
+										<label for="lastName" class="form-label">Last name</label>
+										<input type="text" class="form-control" id="lastName" name="lastName" required>
+										<div class="invalid-feedback"></div>
+									</div>
+									<div class="col-md-4">
+										<label for="gender" class="form-label">Gender</label>
+										<select name="gender" class="form-select form-select-sm" id="gender" required>
+											<option selected value="M">Male</option>
+											<option value="F">Female</option>
+											<option value="O">Other</option>
+										</select>
+										<div class="invalid-feedback"></div>
+									</div>
+									<div class="col-md-4">
+										<label for="dob" class="form-label">Date Of Birth</label>
+										<input type="date" class="form-control " id="dob" name="dob" required>
+										<div class="invalid-feedback"></div>
+									</div>
+
+
+									<div class="col-md-4">
+										<label for="email" class="form-label">Email</label>
+										<input type="email" class="form-control" id="email" name="email" required>
+										<div class="invalid-feedback"></div>
+									</div>
+
+									<div class="col-md-4">
+										<label for="mobileNumber" class="form-label">Mobile Number</label>
+										<input type="tel" class="form-control" id="mobileNumber" name="mobileNumber"
+											required>
+										<div class="invalid-feedback"></div>
+									</div>
+								</div>
+
+							</fieldset>
+							<fieldset data-type="student" class="row my-1 g-3 needs-validation">
+								<div class="col-md-4">
+									<label for="yearOfJoin" class="form-label">Year Of Join</label>
+									<input type="number" class="form-control" id="yearOfJoin" required
+										name="yearOfJoin">
+									<div class="invalid-feedback"></div>
+								</div>
+								<div class="col-md-4">
+									<label for="college" class="form-label">College</label>
+									<input type="text" name="college" class="form-control" id="college" required>
+									<div class="invalid-feedback"></div>
+								</div>
+								<div class="col-md-4">
+									<label for="hallticketNum" class="form-label">Hallticket Number</label>
+									<input type="number" pattern="^130[34]\\d{8}$" class="form-control"
+										id="hallticketNum" name="hallticketNum" required>
+									<div class="invalid-feedback"></div>
+								</div>
+								<div class="col-md-4">
+									<label for="csiId" class="form-label">CSI Id</label>
+									<input type="text" class="form-control" id="csiId" name="csiId" required>
+									<div class="invalid-feedback"></div>
+								</div>
+								<div class="col-md-4">
+									<label for="className" class="form-label">Section</label>
+									<input type="text" class="form-control" id="className" name="className" required>
+									<div class="invalid-feedback"></div>
+								</div>
+							</fieldset>
+							<div class="row my-1 g-3 needs-validation">
+
+								<div class="col-md-6">
+									<label for="password" class="form-label">Password</label>
+									<input type="text" class="form-control" id="password" name="password" required>
+									<div class="invalid-feedback"></div>
+								</div>
+								<div class="col-md-6">
+									<label for="confirm_password" class="form-label">Confirm Password</label>
+									<input type="text" class="form-control" id="confirm_password" required>
+									<div class="invalid-feedback"></div>
+								</div>
+
+								<div class="col-md-4">
+									<label for="profile_image" class="form-label">Profile</label>
+									<input type="file" onchange="readURL(this)" class="form-control" id="profile_image"
+										required accept="image/*" name="profileImageId">
+									<label for="profile_image" class="card d-none" style="width: fit-content;">
+										<img src="" alt="" class="card-img"
+											style="height: 100px;width: auto; max-width:100%" srcset="">
+										<button
+											onclick="this.parentElement.parentElement.querySelector('input').click()"
+											type="button" class="btn btn-sm btn-warning">Change</button>
+									</label>
+								</div>
+
+							</div>
+							<fieldset data-type="student" class="row my-1 g-3 needs-validation">
+								<div class="col-md-12">
+									<label for="address" class="form-label">Address</label>
+									<textarea class="form-control" id="address" name="address" style="resize: vertical;"
+										rows="3"></textarea>
+									<div class="invalid-feedback"></div>
+								</div>
+							</fieldset>
+							<div class="form-footer ">
+								<button type="submit" id="Register" class="btn btn-success">Register</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</main>
+
+	<script id="validation-form">
+		function hideNotRelevantFields(value) {
+			if (!value) {
+				return
+			}
+			if (value === "guest") {
+				document.querySelectorAll("fieldset[data-type='student']").forEach(x => {
+					x.classList.add("d-none")
+					x.querySelectorAll("input,select,textarea").forEach(x => x.removeAttribute("required"))
+				}
+				)
+			} else {
+				document.querySelectorAll("fieldset[data-type='student']").forEach(x => {
+					x.classList.remove("d-none")
+					x.querySelectorAll("input,select,textarea").forEach(x => x.setAttribute("required", "true"))
+				})
+
+			}
+		}
+		function readURL(element) {
+
+			let url = null
+			const file = element.files[0];
+
+			if (!file.type.startsWith('image/')) {
+				alert("Please upload image")
+				element.value = '';
+			}
+			url = element?.files?.[0] && URL.createObjectURL(file);
+			if (url) {
+				element.nextElementSibling.querySelector("img").src = url
+				element.nextElementSibling.classList.remove("d-none")
+				element.classList.add("d-none")
+			} else {
+				element.nextElementSibling.classList.add("d-none")
+				element.classList.remove("d-none")
+			}
+		}
+
+		function handleFormErrors(errorResponse) {
+			// Assuming 'errorResponse' is already parsed as JSON if received from a fetch response
+			errorResponse.forEach(error => {
+				// Extracting the last part of the 'property' path to get the input name
+				const fieldName = error.property.split('.').pop();
+
+				// Select the input element using the name extracted
+				const inputElement = document.querySelector(`[name="${fieldName}"]`);
+
+				if (inputElement) {
+					// Adding 'is-invalid' class to the input element
+					inputElement.classList.add('is-invalid');
+
+					// Assuming the next sibling is where the invalid-feedback message should go
+					const feedbackElement = inputElement.nextElementSibling;
+					if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+						// Set the error message
+						feedbackElement.textContent = error.message;
+						feedbackElement.style.display = 'block'; // Make sure it's visible
+					}
+				}
+			});
+		}
+		function validateForm(event) {
+
+			try {
+				event.preventDefault()
+				form = event.target
+				form.querySelectorAll("input,textarea,select").forEach(x => {
+					x.classList.remove("is-invalid")
+					if (x.nextElementSibling) {
+						if (!x.nextElementSibling.firstElementChild) {
+							// It's safe to clear or modify the textContent
+							x.nextElementSibling.textContent = "";
+						}
+					}
+
+
+				})
+
+
+				confirm_password = form.querySelector("#confirm_password").value
+				password = form.querySelector("#password").value
+				if (confirm_password !== password) {
+					alert("password and confirm password does not match")
+					return false
+				}
+
+				let profileImage = document.querySelector("input#profile_image[type=file]")?.files[0];
+				if (profileImage) {
+					let formData = new FormData();
+					formData.append("image", profileImage);
+					fetch('/api/v1/image/', {
+						method: 'POST',
+						credentials: "include",
+						body: formData,
+
+
+					})
+						.then(response => {
+							if(response.ok){
+								return response.json()
+							}else{
+								return response.json().then(x=> Promise.reject(x))
+							}
+						})
+						.then(data => {
+							if (data.message) {
+								// Assuming the server returns an object like { success: true, message: "Image uploaded with ID: 123" }
+
+								const profileImageElement = document.querySelector("input#profile_image")
+								profileImageElement.type = "hidden"
+								profileImageElement.value = data.message
+
+								// profileImageElement.nextElementSibling.classList.add("d-none")
+							} else {
+								console.error('Failed to upload image.');
+							}
+						})
+						.catch(error => {
+							console.error('Error:', error);
+							alert(error.message)
+						});
+				}
+				// Convert form data to JSON string
+				const jsonFormData = JSON.stringify(Object.fromEntries(new FormData(form)));
+
+				// Log JSON string to console (You can replace this with an actual upload function)
+				console.log('Form Data as JSON:', jsonFormData);
+
+				fetch('/api/v1/student/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': "*"
+					},
+					mode: "cors",
+					body: jsonFormData
+				})
+					.then(response => {
+						if (!response.ok) {
+							if (response.status == 400) {
+								return response.json().then(errors => handleFormErrors(errors)).then(x => response)
+							} else {
+								return response.json().then(errors => alert(errors.message)).then(x => response)
+							}
+						}
+						return response; // Or handle successful submission
+					})
+					.then(data => {
+						if (!data.ok) {
+							return
+						}
+						console.log('Form submitted successfully:', data.json())
+						alert("Registration successful")
+						location.reload()
+
+					})
+					.catch(error => {
+						console.error('Submission failed:', error)
+
+						alert("Registration failed")
+					});
+
+
+			} catch (error) {
+				console.error(error)
+				return false
+			}
+			return false
+		}
+	</script>
+	<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>

@@ -24,24 +24,31 @@ public class ValidYearValidator implements ConstraintValidator<ValidYear, Intege
 			return isValid;
 		}
 
-		String messageTemplate = "";
-
 		Integer currentYear = Year.now().getValue();
-		System.out.println(currentYear);
-		if (validYear.past()) {
-			isValid = value < currentYear;
-		} else if (validYear.present()) {
-			isValid = value == currentYear;
-		} else if (validYear.future()) {
-			isValid = value > currentYear;
-		}
-
+		isValid = validateYear(value, validYear, currentYear);
 		if (!isValid) {
+			String messageTemplate = generateMessageTemplate();
+			messageTemplate = messageTemplate+", But given "+categorizeYear(value, currentYear)+" date";
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(generateMessageTemplate()).addConstraintViolation();
+			context.buildConstraintViolationWithTemplate(messageTemplate).addConstraintViolation();
 		}
 		return isValid;
 
+	}
+	
+	public String categorizeYear(int value, int currentYear) {
+        if (value < currentYear) {
+            return "past";
+        } else if (value == currentYear) {
+            return "present";
+        } else {
+            return "future";
+        }
+    }
+
+	public boolean validateYear(int value, ValidYear validYear, int currentYear) {
+		return (validYear.past() && value < currentYear) || (validYear.present() && value == currentYear)
+				|| (validYear.future() && value > currentYear);
 	}
 
 	private String generateMessageTemplate() {

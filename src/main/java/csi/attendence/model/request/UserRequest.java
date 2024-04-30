@@ -52,8 +52,11 @@ public class UserRequest {
 
 	@NotBlank(groups = { OnCreate.class })
 	private String registrationType;
+	
+	@NotNull(groups = { OnCreate.class },message = "Profile not uploaded")
+	private Long profileImageId;
 
-	@NotEmpty(groups = { OnCreate.class })
+	@NotEmpty(groups = { OnUpdate.class })
 	private List<String> roles;
 
 }

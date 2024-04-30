@@ -18,6 +18,6 @@ public class UrlUtils {
 			return null;
 		}
 		String name = new File(path).getName();
-		return "/resource/%s".formatted(name);
+		return "/assets/img/db/%s".formatted(name);
 	}
 }

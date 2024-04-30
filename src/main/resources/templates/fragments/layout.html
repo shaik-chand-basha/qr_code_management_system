@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:fragment="head">
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+	<meta content="" name="description">
+	<meta content="" name="keywords">
+
+	<!-- Favicons -->
+	<link href="/assets/img/csi.logo.png" rel="icon">
+	<link href="/assets/img/auroras logo.png" rel="apple-touch-icon">
+
+	<!-- Google Fonts -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+		rel="stylesheet">
+
+	<!-- Vendor CSS Files -->
+	<link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+	<link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+	<link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+	<link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+	<link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+	<!-- Template Main CSS File -->
+	<link href="/assets/css/style.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<!-- =======================================================
+  * Template Name: CSI Student Branch
+  * Updated: Jan 29 2024 with Bootstrap v5.3.2
+  * Template URL: https://bootstrapmade.com/CSI Student Branch-free-bootstrap-html-template-corporate/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+
+	<!-- ======= Header ======= -->
+	<header th:fragment="header">
+		<div id="header" class="fixed-top">
+			<div class="container d-flex align-items-center">
+				<img src="/assets/img/csi.logo.png" alt="Header Image" width="70" height="70">
+				<h1 class="logo me-auto"><a href="index.html">CSI Student Branch</a></h1>
+				<!-- Uncomment below if you prefer to use an image logo -->
+				<!--<a href="index.html" class="logo me-auto"><img src="/assets/img/logo.png" alt="" class="img-fluid"></a> -->
+
+				<nav id="navbar" class="navbar">
+					<ul>
+						<li><a class="nav-link scrollto active" href="/">Home</a></li>
+						<li class="dropdown"><a href="#"><span>Events</span> <i class="bi bi-chevron-down"></i></a>
+							<ul>
+								<li><a sec:authorize="hasAnyRole('ADMIN','INCHARGE')" href="/events/create">Create
+										Event</a></li>
+								<li><a href="/events?type=completed">Completed Events</a></li>
+								<li><a href="/events?type=ongoing">Ongoing Events</a></li>
+								<li><a href="/events?type=upcoming">Upcoming Events</a></li>
+								<li><a href="/events?type=registered">Registered Events</a></li>
+								<li><a href="/events?type=all">All Events</a></li>
+							</ul>
+						</li>
+						<li class="dropdown"><a href="#"><span>Student</span> <i class="bi bi-chevron-down"></i></a>
+							<ul>
+								<li><a href="/register">Register</a></li>
+								<th:block sec:authorize="hasAnyRole('ADMIN')">
+									<li><a href="/requests">Requests</a></li>
+									<li><a href="/students">Students</a></li>
+									<li><a href="/coordinators">Co-ordinators</a></li>
+								</th:block>
+							</ul>
+						</li>
+
+						<th:block sec:authorize="isAuthenticated()">
+							<li><a class="nav-link scrollto" href="/me">My Profile</a></li>
+							<li><a class="nav-link scrollto" sec:authorize="isAuthenticated()"
+									th:href="@{/logout}">Logout</a></li>
+						</th:block>
+						<li><a class="nav-link scrollto" href="/register">Register</a></li>
+						<li><a class="nav-link scrollto" sec:authorize="!isAuthenticated()" href="/login">Login</a></li>
+
+
+						<li><a class="nav-link scrollto" href="/about-us">About Us</a></li>
+					</ul>
+					<i class="bi bi-list mobile-nav-toggle"></i>
+				</nav><!-- .navbar -->
+
+			</div>
+		</div>
+		<!-- ======= Hero Section ======= -->
+		<section id="hero" class="d-flex align-items-center h-auto">
+
+			<div class="d-flex align-items-center justify-content-center">
+
+			</div>
+		</section>
+	</header><!-- End Header -->
+
+
+	<main th:id="main" th:fragment="main">
+		<!-- Default main content -->
+	</main>
+
+	<footer id="footer" class="" th:fragment="footer">
+
+
+
+		<div class="footer-top" style="">
+			<div class="container">
+				<div class="row justify-content-between">
+
+					<div class="col-lg-6 col-md-6  footer-contact">
+						<h3>CSI Student Branch</h3>
+						<p>
+							1-118/10, Mallikarjuna Nagar, <br>
+							Peerzadiguda, Uppal,<br>
+							Hyderabad, Telangana - 500 092. <br><br>
+							<strong>Phone:</strong> +91 944 1321 447<br>
+							<strong>Email:</strong> auroraqrcodemanagementsystem@gmail.com<br>
+						</p>
+					</div>
+
+
+					<div class="col-lg-6 col-md-6 footer-links">
+						<h4>Our Social Networks</h4>
+						<p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
+						<div class="social-links mt-3">
+							<a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+							<a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+							<a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+							<a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+							<a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container footer-bottom clearfix">
+			<div class="copyright">
+				&copy; Copyright <strong><span>CSI Student Branch</span></strong>. All Rights Reserved
+			</div>
+			<div class="credits">
+				<!-- All the links in the footer should remain intact. -->
+				<!-- You can delete the links only if you purchased the pro version. -->
+				<!-- Licensing information: https://bootstrapmade.com/license/ -->
+				<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/CSI Student Branch-free-bootstrap-html-template-corporate/ -->
+				Designed by CSI Student Branch Uppal</a>
+			</div>
+		</div>
+		<!-- Vendor JS Files -->
+		<script src="/assets/vendor/aos/aos.js"></script>
+		<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+		<script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+		<script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+		<script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+
+		<!-- Template Main JS File -->
+		<script src="/assets/js/main.js"></script>
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	</footer>
+
+
+</body>
+
+</html>

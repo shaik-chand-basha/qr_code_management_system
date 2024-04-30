@@ -37,6 +37,7 @@ import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.StudentResponse;
 import csi.attendence.model.response.UserInfoResponse;
 import csi.attendence.repository.AuthenticationRepository;
+import csi.attendence.repository.ImageMetadataRepository;
 import csi.attendence.repository.StudentRepository;
 import csi.attendence.repository.TokenValidationsRepository;
 import csi.attendence.repository.UserRepository;
@@ -57,6 +58,7 @@ import lombok.Setter;
 public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 
 	private final UserRepository userRepository;
+	private final ImageMetadataRepository imageMetadataRepository;
 
 	private final StudentRepository studentRepository;
 
@@ -130,6 +132,8 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		StudentInfo requestedStudent = StudentMapper.mapToStudentInfo(request, new StudentInfo());
 		UserRequest userRequest = request.getUserInfo();
 		checkStudentExistence(requestedStudent);
+		userRequest.setRoles(List.of("ROLE_STUDENT"));
+
 		User savedUser = saveUser(userRequest, siteUrl);
 		requestedStudent.setUser(savedUser);
 		if (userAdmin) {
@@ -173,9 +177,15 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		boolean userAdmin = AuthenticationUtils.isUserAdmin(loggedInUser);
 
 		User requestedUser = UserMapper.mapToUser(request, new User());
-		requestedUser.setActive(true);
-		requestedUser.setPassword(passwordEncoder.encode(requestedUser.getPassword()));
 
+		if (userAdmin) {
+			requestedUser.setActive(true);
+		} else {
+			requestedUser.setActive(false);
+		}
+		ImageMetadata profileImage = this.imageMetadataRepository.findById(request.getProfileImageId()).orElse(null);
+		requestedUser.setPassword(passwordEncoder.encode(requestedUser.getPassword()));
+		requestedUser.setFkProfile(profileImage);
 		List<UserRole> roles = userroleRepository.findByRoleIn(request.getRoles());
 		if (roles.isEmpty()) {
 			throw new RuntimeException("Atleast one role required");
@@ -230,6 +240,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("username not found");
 		}
+
 		boolean matches = passwordEncoder.matches(password, user.getPassword());
 		if (matches) {
 			return user;

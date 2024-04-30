@@ -1,5 +1,6 @@
 package csi.attendence.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -117,6 +118,16 @@ public class EventServiceImpl {
 		ApiResponse apiResponse = ApiResponse.builder().status(HttpStatus.OK)
 				.message("User attendence saved successfulyy").build();
 		return apiResponse;
+	}
+
+	public List<EventInfoResponse> findAllEventsActiveOrWillActive() {
+		List<EventInfo> events = this.eventInfoRepository.findAllByActiveTrue();
+		return events.stream().map(x -> EventMapper.mapToEventInfoResponse(x)).collect(Collectors.toList());
+	}
+	
+	public EventInfoResponse findEventById(Long eventId) {
+		EventInfo eventInfo = this.eventInfoRepository.findById(eventId).orElse(null);
+		return EventMapper.mapToEventInfoResponse(eventInfo);
 	}
 
 	public List<EventInfoResponse> findAllEventsRegisteredByUser(Long userId) {

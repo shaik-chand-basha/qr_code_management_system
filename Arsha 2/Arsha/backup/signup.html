@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            max-width: 100vw;
+            overflow: hidden;
+        }
+
+        #signUpForm {
+            max-width: 60vw;
+            background-color: #ffffff;
+            margin: 40px auto;
+            padding: 40px;
+            box-shadow: 0px 6px 18px rgb(0 0 0 / 9%);
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+
+        #signUpForm .form-header {
+            gap: 5px;
+            text-align: center;
+            font-size: .9em;
+        }
+
+        #signUpForm .form-header .stepIndicator {
+            position: relative;
+            flex: 1;
+            padding-bottom: 30px;
+        }
+
+        #signUpForm .form-header .stepIndicator.active {
+            font-weight: 600;
+        }
+
+        #signUpForm .form-header .stepIndicator.finish {
+            font-weight: 600;
+            color: #009688;
+        }
+
+        #signUpForm .form-header .stepIndicator::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            z-index: 9;
+            width: 20px;
+            height: 20px;
+            background-color: #a59ecb;
+            border-radius: 50%;
+            border: 3px solid #a59ecb;
+        }
+
+        #signUpForm .form-header .stepIndicator.active::before {
+            background-color: #464b6b;
+            border: 3px solid #767eac;
+        }
+
+        #signUpForm .form-header .stepIndicator.finish::before {
+            background-color: #464b6b;
+            border: 3px solid #464b6b;
+        }
+
+        #signUpForm .form-header .stepIndicator::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 8px;
+            width: 100%;
+            height: 3px;
+            background-color: #a59ecb;
+        }
+
+        #signUpForm .form-header .stepIndicator.active::after {
+            background-color: #a59ecb;
+        }
+
+        #signUpForm .form-header .stepIndicator.finish::after {
+            background-color: #464b6b;
+        }
+
+        #signUpForm .form-header .stepIndicator:last-child:after {
+            display: none;
+        }
+
+        #signUpForm input {
+            padding: 15px 20px;
+            width: 100%;
+            font-size: 1em;
+            border: 1px solid #e3e3e3;
+            border-radius: 5px;
+        }
+
+        #signUpForm input:focus {
+            border: 1px solid #6971a3;
+            outline: 0;
+        }
+
+        #signUpForm input.invalid {
+            border: 1px solid #ffaba5;
+        }
+
+        #signUpForm .step {
+            display: none;
+        }
+
+        #signUpForm .form-footer {
+            overflow: auto;
+            gap: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid ">
+
+
+        <form id="signUpForm" action="#!" class="card h-100">
+
+
+            <div class="card-body">
+
+
+                <!-- start step indicators -->
+                <div class="form-header d-flex mb-4">
+                    <span class="stepIndicator">Account Type</span>
+                    <span class="stepIndicator">Personal Info</span>
+                    <span class="stepIndicator">Create Account</span>
+                    <span class="stepIndicator">Account Setup</span>
+                    <span class="stepIndicator">Social Profiles</span>
+                    <span class="stepIndicator">Personal Details</span>
+                </div>
+                <!-- end step indicators -->
+
+                <!-- step one -->
+
+                <div class="step">
+                    <p class="mb-4 text-center">Choose Account Type</p>
+                    <div class="row row-gap-2 justify-content-center">
+                        <div class="col-md-3 col-sm-5">
+                            <input type="radio" name="registration_type" value="admin" id="register_admin"
+                                class="btn-check">
+                            <label for="register_admin" class="btn btn-outline-success">
+                                <img src="/images/admin_logo.png" style="height: 100px" alt="Admin">
+                                <p>Admin</p>
+                            </label>
+                        </div>
+                        <div class="col-md-3 col-sm-5">
+                            <input type="radio" name="registration_type" value="student" checked id="register_student"
+                                class="btn-check">
+                            <label for="register_student" class="btn btn-outline-success">
+                                <img src="/images/graduated.png" style="height: 100px;" alt="Student">
+                                <p>Student</p>
+                            </label>
+                        </div>
+                        <div class="col-md-3 col-sm-5">
+                            <input type="radio" name="registration_type" id="register_guest" class="btn-check">
+                            <label for="register_guest" class="btn btn-outline-success">
+                                <img src="/images/guest_logo.png" style="height: 100px;" alt="Guest">
+                                <p>Guest</p>
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p class="text-center mb-4">Personal Info</p>
+                    <div class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-4">
+                            <label for="validationCustom01" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="validationCustom01" value="Mark" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="validationCustom04" class="form-label">Gender</label>
+                            <select class="form-select form-select-sm" id="validationCustom04" required>
+                                <option selected value="M">Male</option>
+                                <option selected value="F">FeMale</option>
+                                <option selected value="O">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label">Date Of Birth</label>
+                            <input type="date" class="form-control-sm" id="validationCustom02" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <p class="text-center mb-4">Create Account</p>
+                    <div class="row g-3 needs-validation" novalidate>
+                        <div class="col-md-4">
+                            <label for="validationCustom01" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="validationCustom01" value="Mark" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label">Mobile Number</label>
+                            <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="validationCustom02" class="form-label">Password</label>
+                            <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="validationCustom02" class="form-label">Confirm Password</label>
+                            <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="validationCustom02" class="form-label">Profile</label>
+                            <input type="file" onchange="readURL(this)" class="form-control" id="validationCustom02"
+                                value="Otto" required>
+                            <div class="card d-none" style="width: fit-content;">
+                                <div class="card-body" style="width: fit-content;">
+                                    <img src="" alt="" class="card-img" style="height: 100px;width: auto;" srcset="">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div class="step">
+                    <p class="text-center mb-4">Create your account</p>
+                    <div class="row justify-content-between">
+                        <div class="mb-3 col-xl-6 col-12 form-group">
+                            <input type="email" placeholder="Email Address" class="form-control"
+                                oninput="this.className = ''" name="email">
+                        </div>
+                        <div class="mb-3 col-xl-6 col-12">
+                            <input type="text" placeholder="Mobile Number" oninput="this.className = ''"
+                                name="mobileNumber">
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="mb-3 mb-3 col-xl-6 col-12">
+                            <input type="password" placeholder="Password" oninput="this.className = ''" name="password">
+                        </div>
+                        <div class="mb-3 mb-3 col-xl-6 col-12">
+                            <input type="password" placeholder="Confirm Password" oninput="this.className = ''"
+                                name="password">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- step two -->
+                <div class="step">
+                    <p class="text-center mb-4">Student Info</p>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Linked In" oninput="this.className = ''" name="linkedin">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Twitter" oninput="this.className = ''" name="twitter">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Facebook" oninput="this.className = ''" name="facebook">
+                    </div>
+                </div>
+
+                <!-- step three -->
+                <div class="step">
+                    <p class="text-center mb-4">We will never sell it</p>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Full name" oninput="this.className = ''" name="fullname">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Mobile" oninput="this.className = ''" name="mobile">
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" placeholder="Address" oninput="this.className = ''" name="address">
+                    </div>
+                </div>
+
+                <!-- start previous / next buttons -->
+            </div>
+            <div class="form-footer d-flex justify-content-between">
+                <button type="button" id="prevBtn" class="btn btn-warning" onclick="nextPrev(-1)">Previous</button>
+                <button type="button" id="nextBtn" class="btn btn-success" onclick="nextPrev(1)">Next</button>
+            </div>
+            <!-- end previous / next buttons -->
+        </form>
+    </div>
+    <script>var currentTab = 2; // Current tab is set to be the first tab (0)
+        showTab(currentTab); // Display the current tab
+
+        function showTab(n) {
+            // This function will display the specified tab of the form...
+            var x = document.getElementsByClassName("step");
+            x[n].style.display = "block";
+            //... and fix the Previous/Next buttons:
+            if (n == 0) {
+                document.getElementById("prevBtn").style.visibility = "hidden";
+            } else {
+                document.getElementById("prevBtn").style.visibility = "visible";
+            }
+            if (n == (x.length - 1)) {
+                document.getElementById("nextBtn").innerHTML = "Submit";
+                document.getElementById("nextBtn").setAttribute("type", "Submit")
+            } else {
+                document.getElementById("nextBtn").innerHTML = "Next";
+            }
+            //... and run a function that will display the correct step indicator:
+            fixStepIndicator(n)
+        }
+
+        function nextPrev(n) {
+            // This function will figure out which tab to display
+            var x = document.getElementsByClassName("step");
+            // Exit the function if any field in the current tab is invalid:
+            if (n == 1 && !validateForm()) return true;
+            // Hide the current tab:
+            x[currentTab].style.display = "none";
+            // Increase or decrease the current tab by 1:
+            currentTab = currentTab + n;
+            // if you have reached the end of the form...
+            if (currentTab >= x.length) {
+                return false;
+            }
+            // Otherwise, display the correct tab:
+            showTab(currentTab);
+        }
+
+        function validateForm() {
+            return true;
+            // This function deals with validation of the form fields
+            var x, y, i, valid = true;
+            x = document.getElementsByClassName("step");
+            y = x[currentTab].getElementsByTagName("input");
+            // A loop that checks every input field in the current tab:
+            for (i = 0; i < y.length; i++) {
+                // If a field is empty...
+                if (y[i].value == "") {
+                    // add an "invalid" class to the field:
+                    y[i].className += " invalid";
+                    // and set the current valid status to false
+                    valid = false;
+                }
+            }
+            valid = true
+            // If the valid status is true, mark the step as finished and valid:
+            if (valid) {
+                document.getElementsByClassName("stepIndicator")[currentTab].className += " finish";
+            }
+            return valid; // return the valid status
+        }
+
+        function fixStepIndicator(n) {
+            // This function removes the "active" class of all steps...
+            var i, x = document.getElementsByClassName("stepIndicator");
+            for (i = 0; i < x.length; i++) {
+                x[i].classList.remove("active")
+                if (i >= n) {
+                    x[i].classList.remove("finish")
+                }
+            }
+            //... and adds the "active" class on the current step:
+            x[n].className += " active";
+            x[n].classList.add("active")
+            x[n - 1]?.classList.add("finish")
+
+        }
+
+        function readURL(element) {
+            let url = null
+            url = element?.files?.[0] && URL.createObjectURL(element.files[0]);
+            if (url) {
+                element.nextElementSibling.querySelector("img").src = url
+                element.nextElementSibling.classList.remove("d-none")
+                element.classList.add("d-none")
+            } else {
+                element.nextElementSibling.classList.add("d-none")
+                element.classList.remove("d-none")
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

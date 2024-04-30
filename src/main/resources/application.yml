@@ -2,9 +2,11 @@ server:
   port: 8000
   error:
     path: /error
+    
 application: 
   image:
-    folder_path: C:\\qr_code_management_system\\resource
+    folder_path: classpath:assets/img
+    
   email_verification:
     expires: 60
   security:
@@ -35,17 +37,21 @@ spring:
   web:
     resources:
       static-locations:
-        - file:C:\\qr_code_management_system\\resource
+        - classpath:assets
 
   mvc:
-    static-path-pattern: /resource/**
+    static-path-pattern: /assets/**
+    
+
+    
+    
     
     
   mail:
     port: 587
     host: smtp.gmail.com
-    username: shaikchand8832@gmail.com
-    password: odwgejqhrpqzlgoj
+    username: csibranch00@gmail.com
+    password: eoyr dwhh kvro itur
     properties:
       mail:
         smtp:

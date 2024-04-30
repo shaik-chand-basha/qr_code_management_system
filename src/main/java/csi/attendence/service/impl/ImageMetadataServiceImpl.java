@@ -1,7 +1,9 @@
 package csi.attendence.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,13 +40,14 @@ public class ImageMetadataServiceImpl {
 		if (!isImage(imageFile)) {
 			throw new BadRequestException("file %s is not an image.".formatted(imageFile.getOriginalFilename()));
 		}
-		String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
+		Resource resource = new ClassPathResource("assets/img/db/dummy.txt");
 
+		String extension = FilenameUtils.getExtension(imageFile.getOriginalFilename());
 		String randomFileName = UUID.randomUUID().toString().replace("-", "");
 		String fileName = "%s%d.%s".formatted(randomFileName, new Date().getTime(), extension);
-		File destinationFile = Path.of(imageFolderPath, fileName).toFile();
-
+		File destinationFile;
 		try {
+			destinationFile = Path.of(Paths.get(resource.getURI()).getParent().toString(), fileName).toFile();
 
 			imageFile.transferTo(destinationFile);
 		} catch (Exception e) {

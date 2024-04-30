@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventController {
 
-	public static final String BASE_URL = "/api/v1/event";
+	public static final String BASE_URL = "/api/v1/events";
 
 	private final EventServiceImpl eventService;
 
@@ -51,7 +51,7 @@ public class EventController {
 
 	@GetMapping("/user/{user_id}")
 	public Object allEventsRegistered(@PathVariable("event_id") Long evetId, @PathVariable("user_id") Long userId) {
-		
+
 		return null;
 	}
 
@@ -59,6 +59,12 @@ public class EventController {
 	public Object updateEvent(@PathVariable("event_id") Long evetId,
 			@RequestParam("eventPhoto") MultipartFile eventPhoto) {
 		return null;
+	}
+
+	@GetMapping
+	public ResponseEntity<List<EventInfoResponse>> getAllCurrentAndFutureEvents() {
+		List<EventInfoResponse> events = this.eventService.findAllEventsActiveOrWillActive();
+		return ResponseEntity.ok(events);
 	}
 
 	@PostMapping("/{event_id}/attendence/user/{user_id}")
@@ -69,9 +75,9 @@ public class EventController {
 		return ResponseEntity.ok(apiResponse);
 	}
 
-	@PostMapping(path="/{event_id}/upload_image",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(path = "/{event_id}/upload_image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse> uploadImagesToThisEvent(@PathVariable("event_id") Long evetId,
-			@RequestParam("eventPhotos") @Size(max = 5,min = 1) List<MultipartFile> eventPhotos) {
+			@RequestParam("eventPhotos") @Size(max = 5, min = 1) List<MultipartFile> eventPhotos) {
 
 		ApiResponse apiResponse = this.eventService.uploadImageToEvent(evetId, eventPhotos);
 		return ResponseEntity.ok(apiResponse);
@@ -82,10 +88,8 @@ public class EventController {
 		return null;
 	}
 
-	
-	
 	@GetMapping("/{event_id}")
-	public Object findAllUsersRegisterdToThisEvent(@PathVariable("event_id") Long evetId) {
+	public Object getEventInfo(@PathVariable("event_id") Long evetId) {
 		return null;
 	}
 

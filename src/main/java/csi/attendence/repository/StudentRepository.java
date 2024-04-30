@@ -9,6 +9,6 @@ public interface StudentRepository extends JpaRepository<StudentInfo, Long> {
 	boolean existsByCsiId(String csiId);
 
 	boolean existsByHallticketNum(String hallticketNum);
-
-
+	
+	
 }

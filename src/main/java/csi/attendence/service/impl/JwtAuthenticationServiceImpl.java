@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
+import javax.security.auth.login.AccountExpiredException;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import csi.attendence.entity.AuthenticationInfo;
 import csi.attendence.entity.User;
+import csi.attendence.exceptions.AccessTokenExpiredException;
 import csi.attendence.model.response.AuthenticationResponse;
 import csi.attendence.repository.AuthenticationRepository;
 import csi.attendence.service.CustomUserDetailsService;
@@ -45,10 +47,10 @@ public class JwtAuthenticationServiceImpl {
 	@Value("${application.security.jwt.refresh_token_expires}")
 	private Long refreshTokenExpires;
 
-	public User validateAccessToken(String token) {
+	public User validateAccessToken(String token)  {
 
 		if (isTokenExpired(token)) {
-			throw new RuntimeException();
+			throw new AccessTokenExpiredException();
 		}
 		AuthenticationInfo authenticationInfo = this.authenticationRepository.findByToken(token)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found with the given access token."));
@@ -132,7 +134,11 @@ public class JwtAuthenticationServiceImpl {
 	}
 
 	private Boolean isTokenExpired(String token) {
-		return extractExpiration(token).before(new Date());
+		try {
+			return extractExpiration(token).before(new Date());
+		} catch (Exception e) {
+			return true;
+		}
 	}
 
 	public String extractUsername(String token) {

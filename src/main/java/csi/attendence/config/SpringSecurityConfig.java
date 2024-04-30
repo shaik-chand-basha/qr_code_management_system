@@ -33,15 +33,28 @@ public class SpringSecurityConfig {
 
 		http.csrf(x -> x.disable());
 		http.authorizeHttpRequests(r -> {
-			r.requestMatchers("/api/v1/login", "/api/v1/refresh-token","/api/v1/student/register","/verify-email","/resource/**","/error").permitAll();
+			r.requestMatchers("/api/v1/login", "/api/v1/refresh-token", "/api/v1/student/register", "/verify-email",
+					"/assets/**", "/error", "/login", "/logout", "/","/register","/api/v1/**").permitAll();
 			r.requestMatchers("/api/v1/user/**").authenticated();
-			r.anyRequest().permitAll();
+			r.anyRequest().authenticated();
 		});
-		http.formLogin(fl -> fl.disable());
+		http.formLogin(fl -> {
+//			fl.disable();
+			fl.loginPage("/login").defaultSuccessUrl("/");
+		});
+
+		http.logout(l -> {
+			l.clearAuthentication(true);
+			l.deleteCookies("accessToken", "refreshToken");
+			l.logoutSuccessUrl("/");
+			l.logoutUrl("/logout");
+		});
 //		http.authorizeHttpRequests(x->x.anyRequest().authenticated());
 		http.httpBasic(t -> {
+
 			t.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint());
 		});
+
 		http.sessionManagement(sm -> {
 			sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		});

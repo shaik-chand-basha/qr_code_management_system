@@ -8,6 +8,8 @@ import csi.attendence.constraints.ValidYear;
 import csi.attendence.constraints.groups.OnCreate;
 import csi.attendence.constraints.groups.OnUpdate;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -21,12 +23,14 @@ import lombok.Setter;
 public class StudentRequest {
 
 	@NotBlank(groups = { OnCreate.class })
-	@Pattern(regexp = "^130[34]\\d{8}$",groups = { OnCreate.class,OnUpdate.class })
-	@Size(min = 12, max = 12,groups = { OnCreate.class,OnUpdate.class })
+	@Pattern(regexp = "^130[34]\\d{8}$", groups = { OnCreate.class,
+			OnUpdate.class })
+	@Size(min = 12, max = 12, message = "Hallticker number should be 12 digit long only", groups = { OnCreate.class,
+			OnUpdate.class })
 	private String hallticketNum;
 
 	@NotBlank(groups = { OnCreate.class })
-	@Size(min = 10,groups = { OnCreate.class,OnUpdate.class })
+	@Size(min = 10, groups = { OnCreate.class, OnUpdate.class })
 	private String csiId;
 
 	@NotBlank(groups = { OnCreate.class })
@@ -35,17 +39,18 @@ public class StudentRequest {
 	@NotBlank(groups = { OnCreate.class })
 	private String college;
 
-	@ValidYear(past = true, present = true,groups = { OnCreate.class,OnUpdate.class })
+	@ValidYear(past = true, present = true, groups = { OnCreate.class, OnUpdate.class })
 	@NotNull(groups = { OnCreate.class })
+	@Min(2015)
 	private Integer yearOfJoin;
 
 	private String address;
 
 	@NotNull(groups = { OnCreate.class })
 	@Valid
+	@JsonUnwrapped
 	private UserRequest userInfo;
-	
-	
+
 	private Boolean approved;
 
 }

@@ -1,0 +1,464 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="/assets/img/csi.logo.png" rel="icon">
+  <link href="/assets/img/auroras logo.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <!-- Template Main CSS File -->
+  <link href="/assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: CSI Student Branch
+  * Updated: Jan 29 2024 with Bootstrap v5.3.2
+  * Template URL: https://bootstrapmade.com/CSI Student Branch-free-bootstrap-html-template-corporate/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+
+  <!-- ======= Header ======= -->
+  <header th:fragment="header">
+    <div id="header" class="fixed-top">
+      <div class="container d-flex align-items-center">
+        <img src="/assets/img/csi.logo.png" alt="Header Image" width="70" height="70">
+        <h1 class="logo me-auto"><a href="index.html">CSI Student Branch</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!--<a href="index.html" class="logo me-auto"><img src="/assets/img/logo.png" alt="" class="img-fluid"></a> -->
+
+        <nav id="navbar" class="navbar">
+          <ul>
+            <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+            <li class="dropdown"><a href="#"><span>Events</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="Create.html">Create Event</a></li>
+                <li><a href="events.html">Completed Events</a></li>
+                <li><a href="events.html">Ongoing Events</a></li>
+                <li><a href="events.html">Upcoming Events</a></li>
+                <li><a href="events.html">Registered Events</a></li>
+                <li><a href="events.html?type=all">All Events</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#"><span>Student</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="Register.html">Register</a></li>
+                <li><a href="Requests.html">Requests</a></li>
+                <li><a href="Students.html">Students</a></li>
+                <li><a href="Coordinators.html">Co-ordinators</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#"><span>Attendence</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="TakeAttendence.html">Take Attendence</a></li>
+                <li><a href="QrCode.html">Qr Code</a></li>
+                <li><a href="EventAttendence.html">Event Attendence</a></li>
+                <li><a href="StudentAttendence.html">Student Attendence</a></li>
+              </ul>
+            </li>
+            <li><a class="nav-link scrollto" href="index BL.html">My Profile</a></li>
+            <li><a class="nav-link scrollto" href="Register.html">Register</a></li>
+            <li><a class="nav-link scrollto" href="/login">Login</a></li>
+            <li><a class="nav-link scrollto" href="/about-us">About Us</a></li>
+          </ul>
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+      </div>
+    </div>
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="d-flex align-items-center h-auto">
+
+      <div class="d-flex align-items-center justify-content-center">
+
+      </div>
+    </section>
+  </header><!-- End Header -->
+
+
+  <main id="main">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#emailVerificationModal">
+      Verify Email
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="emailVerificationModal" tabindex="-1" aria-labelledby="emailVerificationModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="emailVerificationModalLabel">Email Verification</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Form for email verification -->
+            <form id="emailVerificationForm">
+              <div class="mb-3">
+                <label for="emailInput" class="form-label">Email address</label>
+                <input type="number" class="form-control" id="emailInput" name="email" placeholder="Enter your email"
+                  required>
+                <div class="invalid-feedback">
+                  Please provide a valid email.
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success">Verify Email</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs mt-0">
+      <div class="container">
+
+        <nav>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item">Registration</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="container">
+        <h4>Register Here</h4>
+        <div class="card">
+          <div class="card-body">
+
+            <form class="row g-3 needs-validation" onsubmit="validateForm(event)">
+              <div class="row g-3 card-title align-items-center">
+                <div class="col-auto">
+                  <label for="register-type" class="col-form-label">Registration Type</label>
+                </div>
+                <div class="col-auto">
+                  <select name="registrationType" required onchange="hideNotRelevantFields(this.value)"
+                    class="form-select  form-select-sm" aria-label="register-type" id="register-type">
+                    <option value="student" selected>Student</option>
+                    <option value="guest">Guest</option>
+                  </select>
+
+                </div>
+
+              </div>
+              <fieldset>
+
+                <div class="row g-3 my-1 needs-validation">
+                  <div class="col-md-4">
+                    <label for="firstName" class="form-label">First name</label>
+                    <input type="text" name="firstName" class="form-control" id="firstName" required>
+                    <div class="invalid-feedback"></div>
+
+                  </div>
+                  <div class="col-md-4">
+                    <label for="lastName" class="form-label">Last name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    <div class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select name="gender" class="form-select form-select-sm" id="gender" required>
+                      <option selected value="M">Male</option>
+                      <option value="F">Female</option>
+                      <option value="O">Other</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="dob" class="form-label">Date Of Birth</label>
+                    <input type="date" class="form-control form-control-sm" id="dob" name="dob" required>
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+
+                  <div class="col-md-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="mobileNumber" class="form-label">Mobile Number</label>
+                    <input type="tel" class="form-control" id="mobileNumber" name="mobileNumber" required>
+                    <div class="invalid-feedback"></div>
+                  </div>
+                </div>
+
+              </fieldset>
+              <fieldset data-type="student" class="row my-1 g-3 needs-validation">
+                <div class="col-md-4">
+                  <label for="yearOfJoin" class="form-label">Year Of Join</label>
+                  <input type="number" class="form-control" id="yearOfJoin" required name="yearOfJoin">
+                  <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-4">
+                  <label for="college" class="form-label">College</label>
+                  <input type="text" name="college" class="form-control" id="college" required>
+                  <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-4">
+                  <label for="hallticketNum" class="form-label">Hallticket Number</label>
+                  <input type="number" pattern="^130[34]\\d{8}$" class="form-control" id="hallticketNum" required>
+                  <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-4">
+                  <label for="csiId" class="form-label">CSI Id</label>
+                  <input type="text" class="form-control" id="csiId" name="csiId" required>
+                  <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-4">
+                  <label for="className" class="form-label">Section</label>
+                  <input type="text" class="form-control" id="className" name="className" required>
+                  <div class="invalid-feedback"></div>
+                </div>
+              </fieldset>
+              <div class="row my-1 g-3 needs-validation">
+                <div class="col-md-6">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="text" class="form-control" id="password" name="password" required>
+                  <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-6">
+                  <label for="confirm_password" class="form-label">Confirm Password</label>
+                  <input type="text" class="form-control" id="confirm_password" required>
+                  <div class="invalid-feedback"></div>
+                </div>
+                <div class="col-md-4">
+                  <label for="profile-image" class="form-label">Profile</label>
+                  <input type="file" onchange="readURL(this)" class="form-control" id="profile-image" accept="image/*"
+                    required>
+                  <label for="profile-image" class="card d-none" style="width: fit-content;cursor: pointer;">
+                    <div class="card-body" style="width: fit-content;">
+                      <img src="" alt="" class="card-img" style="height: 100px;width: auto;" srcset="">
+                    </div>
+                    <button onclick="this.parentElement.previousElementSibling.click()" type="button"
+                      class="btn btn-sm btn-warning">Change</button>
+                  </label>
+                </div>
+                <div class="col-md-12">
+                  <label for="address" class="form-label">Address</label>
+                  <textarea class="form-control" id="address" name="address" style="resize: vertical;"
+                    rows="3"></textarea>
+                  <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-footer ">
+                  <button type="submit" id="Register" class="btn btn-success">Register</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+
+  </main>
+
+  <script id="validation-form">
+    function hideNotRelevantFields(value) {
+      if (!value) {
+        return
+      }
+      if (value === "guest") {
+        document.querySelectorAll("fieldset[data-type='student']").forEach(x => {
+          x.classList.add("d-none")
+          x.querySelectorAll("input,select,textarea").forEach(x => x.removeAttribute("required"))
+        }
+        )
+      } else {
+        document.querySelectorAll("fieldset[data-type='student']").forEach(x => {
+          x.classList.remove("d-none")
+          x.querySelectorAll("input,select,textarea").forEach(x => x.setAttribute("required", "true"))
+        })
+
+      }
+    }
+    function readURL(element) {
+
+      let url = null
+      const file = element.files[0];
+
+      if (!file.type.startsWith('image/')) {
+        alert("Please upload image")
+        element.value = '';
+      }
+      url = element?.files?.[0] && URL.createObjectURL(file);
+      if (url) {
+        element.nextElementSibling.querySelector("img").src = url
+        element.nextElementSibling.classList.remove("d-none")
+        element.classList.add("d-none")
+      } else {
+        element.nextElementSibling.classList.add("d-none")
+        element.classList.remove("d-none")
+      }
+    }
+
+    function handleFormErrors(errorResponse) {
+      // Assuming 'errorResponse' is already parsed as JSON if received from a fetch response
+      errorResponse.forEach(error => {
+        // Extracting the last part of the 'property' path to get the input name
+        const fieldName = error.property.split('.').pop();
+
+        // Select the input element using the name extracted
+        const inputElement = document.querySelector(`[name="${fieldName}"]`);
+
+        if (inputElement) {
+          // Adding 'is-invalid' class to the input element
+          inputElement.classList.add('is-invalid');
+
+          // Assuming the next sibling is where the invalid-feedback message should go
+          const feedbackElement = inputElement.nextElementSibling;
+          if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+            // Set the error message
+            feedbackElement.textContent = error.message;
+            feedbackElement.style.display = 'block'; // Make sure it's visible
+          }
+        }
+      });
+    }
+    function validateForm(event) {
+
+      try {
+        event.preventDefault()
+        form = event.target
+        form.querySelectorAll("input,textarea,select").forEach(x => {
+          x.classList.remove("is-invalid")
+          if (x.nextElementSibling?.textContent) {
+            x.nextElementSibling.textContent = ""
+          }
+
+
+        })
+
+        confirm_password = form.querySelector("#confirm_password").value
+        password = form.querySelector("#password").value
+        if (confirm_password !== password) {
+          alert("password and confirm password does not match")
+          return false
+        }
+
+
+        // Convert form data to JSON string
+        const jsonFormData = JSON.stringify(Object.fromEntries(new FormData(form)));
+
+        // Log JSON string to console (You can replace this with an actual upload function)
+        console.log('Form Data as JSON:', jsonFormData);
+
+        fetch('http://localhost:8000/api/v1/student/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': "*"
+          },
+          mode: "cors",
+          body: jsonFormData
+        })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(errors => handleFormErrors(errors));
+            }
+            return response.json(); // Or handle successful submission
+          })
+          .then(data => console.log('Form submitted successfully:', data))
+          .catch(error => console.error('Submission failed:', error));
+
+
+      } catch (error) {
+        console.error(error)
+        return false
+      }
+      return false
+    }
+  </script>
+
+  <footer id="footer" class="" th:fragment="footer">
+
+    <h1></h1>
+
+    <div class="footer-top" style="">
+      <div class="container">
+        <div class="row justify-content-between">
+
+          <div class="col-lg-3 col-md-6  footer-contact">
+            <h3>CSI Student Branch</h3>
+            <p>
+              1-118/10, Mallikarjuna Nagar, <br>
+              Peerzadiguda, Uppal,<br>
+              Hyderabad, Telangana - 500 092. <br><br>
+              <strong>Phone:</strong> +91 944 1321 447<br>
+              <strong>Email:</strong> auroraqrcodemanagementsystem@gmail.com<br>
+            </p>
+          </div>
+
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
+            <div class="social-links mt-3">
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        &copy; Copyright <strong><span>CSI Student Branch</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/CSI Student Branch-free-bootstrap-html-template-corporate/ -->
+        Designed by CSI Student Branch Uppal</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="/assets/js/main.js"></script>
+</body>
+
+</html>

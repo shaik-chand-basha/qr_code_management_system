@@ -19,13 +19,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //	@Query(value = "From User as u left join fetch u.roles where u.email=:username or u.userName=:username")
 //	Optional<User> findUserByEmailOrMobileNumberOrUsername(@Valid @NotBlank String username);
 
-	@Query(value = "From User as u left join fetch u.roles where u.email=:email and active=true")
+	@Query(value = "From User as u left join fetch u.roles where u.email=:email")
 	Optional<User> findByEmailAndActive(String email);
 
-	@Query("SELECT u FROM StudentInfo as st inner join  st.user as u where st.hallticketNum=:htNumber and u.active=true")
+	@Query("SELECT u FROM StudentInfo as st inner join  st.user as u where st.hallticketNum=:htNumber")
 	Optional<User> findByHallticketNumber(Long htNumber);
 
-	@Query(value = "From User as u left join fetch u.roles where u.mobileNumber=:mobileNumber and active=true")
+	@Query(value = "From User as u left join fetch u.roles where u.mobileNumber=:mobileNumber")
 	Optional<User> findByMobileNumberAndActiveTrue(String mobileNumber);
 
 	boolean existsByEmail(String email);
