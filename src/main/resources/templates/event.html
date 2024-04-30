@@ -71,8 +71,9 @@
 
 					<button type="button" class="btn col-auto m-1 btn-sm btn-secondary"><a href="/"
 							class="nav-link">Join Whatsapp</a></button>
-					<button type="button" class="btn col-auto m-1 btn-sm btn-secondary"><a href="/"
-							class="nav-link">Register</a></button>
+					<button type="button" class="btn col-auto m-1 btn-sm btn-secondary">
+						<a th:href="@{'/api/v1/events/' + ${event.eventId} + '/register/user/' + ${#authentication.getPrincipal().getUserId()}}"
+							target="_blank" class="nav-link">Register</a></button>
 					<button type="button" class="btn col-auto m-1 btn-sm btn-secondary"><a href="/"
 							class="nav-link">Copy Whatsapp link </a></button>
 					<th:block sec:authorize="hasAnyRole('ADMIN','INCHARGE')">
@@ -86,8 +87,48 @@
 					<button type="button" class="btn col-auto m-1 btn-sm btn-secondary"><a href="/"
 							class="nav-link">Event Data</a></button>
 				</div>
-				<!-- Button trigger modal -->
+				
 
+				<div th:if="${ not#lists.isEmpty(attendenceUsers)}" class="mt-3">
+					<h5>Event Attendence</h5>
+					<table class="table">
+
+						<thead>
+							<tr>
+								<th scope="col">Student Id</th>
+								<th scope="col">Student Name</th>
+								<th scope="col">Attendence Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr scope="row" th:each="user : ${attendenceUsers}">
+								<td th:text="${user.userId}"></td>
+								<td th:text="${user.firstName+user.lastName}"></td>
+								<td th:text="${user.attendenceTime}"></td>
+							</tr>
+						</tbody>
+						<table>
+				</div>
+				<div th:if="${ not#lists.isEmpty(registeredUsers)}" class="mt-3">
+					<h5>Registered Users For this event</h5>
+					<table class="table">
+
+						<thead>
+							<tr>
+								<th scope="col">Student Id</th>
+								<th scope="col">Student Name</th>
+							
+							</tr>
+						</thead>
+						<tbody>
+							<tr scope="row" th:each="user : ${registeredUsers}">
+								<td th:text="${user.userId}"></td>
+								<td th:text="${user.firstName+user.lastName}"></td>
+							
+							</tr>
+						</tbody>
+						<table>
+				</div>
 
 				<!-- Modal -->
 				<div class="modal fade" id="scan_qr_code_modal" tabindex="-1" role="dialog"
@@ -146,10 +187,10 @@
 							return
 						}
 						fetch(`/api/v1/events/${eventId}/attendence/user/${userId}`, {
-							method: "POST",credentials:"include"
+							method: "POST", credentials: "include"
 						}).then(x => {
 							if (x.ok) {
-								return x.json()
+								return x.json().then(x => alert(x.message))
 							} else if (x.status == 404) {
 								alert("User not found! Please scan qr code with valid qr code")
 							} else {
@@ -162,8 +203,8 @@
 						if (!id || Number.isNaN(id)) {
 							return
 						}
-						fetch('/api/v1/student/' + id,{
-							credentials:"include"
+						fetch('/api/v1/student/' + id, {
+							credentials: "include"
 						}).then(x => {
 							if (x.ok) {
 								return x.json()
@@ -234,7 +275,7 @@
 
 						// Function to start the scanner
 						function startScanner() {
-							htmlscanner = new Html5QrcodeScanner("my-qr-reader", {fps: 10, qrbox: 250});
+							htmlscanner = new Html5QrcodeScanner("my-qr-reader", { fps: 10, qrbox: 250 });
 							htmlscanner.render(onScanSuccess);
 						}
 

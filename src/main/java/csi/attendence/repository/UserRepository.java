@@ -34,5 +34,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	@Query("SELECT new csi.attendence.model.response.UserInfoResponse(u.userId,u.fkProfile.pathToImage,u.firstName,u.lastName) From User as u left join u.fkProfile where u.firstName=:firstName and u.dob=:dob")
 	List<UserInfoResponse> findUserByFirstNameAndDob(String firstName, Date dob);
+	
+	@Query("SELECT new csi.attendence.model.response.UserInfoResponse(att.fkUser.userId,att.fkUser.fkProfile.pathToImage,att.fkUser.firstName,att.fkUser.lastName,att.attendenceDatetime) From EventAttendence att where att.event.eventId=:eventId")
+	List<UserInfoResponse> findAllUsersAttendenceByEventId(Long eventId);
+	
+	@Query("SELECT new csi.attendence.model.response.UserInfoResponse(att.id.fkUser.userId,att.id.fkUser.fkProfile.pathToImage,att.id.fkUser.firstName,att.id.fkUser.lastName) From EventRegistration att where att.id.event.eventId=:eventId")
+	List<UserInfoResponse> findAllUsersRegisteredByEventId(Long eventId);
 
 }

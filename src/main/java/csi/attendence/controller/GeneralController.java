@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import csi.attendence.model.request.PasswordResetFinalRequest;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.EventInfoResponse;
+import csi.attendence.model.response.UserInfoResponse;
+import csi.attendence.repository.UserRepository;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.service.impl.EmailServiceImpl;
 import csi.attendence.service.impl.EventServiceImpl;
@@ -25,7 +27,6 @@ public class GeneralController {
 	private final EmailServiceImpl emailService;
 
 	private final EventServiceImpl eventService;
-
 	private final CustomUserDetailsService customUserDetailsService;
 
 	@GetMapping("/verify-email")
@@ -39,14 +40,19 @@ public class GeneralController {
 		return "login";
 	}
 
+	@GetMapping("/events/create")
+	public String createEvent() {
+		return "createEvent";
+	}
+
 	@GetMapping
-	public String home( Model model) {
+	public String home(Model model) {
 		List<EventInfoResponse> events = this.eventService.findAllEventsActiveOrWillActive();
 		model.addAttribute("events", events);
-		
+
 		return "index";
 	}
-	
+
 	@GetMapping("/events")
 	public String events(@RequestParam(required = false) String type, Model model) {
 		List<EventInfoResponse> events = this.eventService.findAllEventsActiveOrWillActive();
@@ -58,7 +64,11 @@ public class GeneralController {
 	@GetMapping("/events/{eventId}")
 	public String event(@PathVariable Long eventId, Model model) {
 		EventInfoResponse event = this.eventService.findEventById(eventId);
+		List<UserInfoResponse> attendenceUsers = this.customUserDetailsService.findAllUsersAttendenceByEventId(eventId);
+		List<UserInfoResponse> registeredUsers = this.customUserDetailsService.findAllUsersRegisteredByEventId(eventId);
 		model.addAttribute("event", event);
+		model.addAttribute("attendenceUsers", attendenceUsers);
+		model.addAttribute("registeredUsers", registeredUsers);
 		return "event";
 	}
 

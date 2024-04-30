@@ -14,4 +14,5 @@ public interface EventInfoRepository extends JpaRepository<EventInfo, Long> {
 	List<EventInfo> findAllByActiveTrueAndStartingDateGreaterThanEqualAndEndingDateLessThanEqual(LocalDate startingDate,LocalDate endingDate);
 	List<EventInfo> findAllByActiveTrue();
 	
+	
 }

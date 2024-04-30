@@ -9,4 +9,5 @@ import csi.attendence.entity.EventRegistrationId;
 @Repository
 public interface EventRegistrationRepository extends JpaRepository<EventRegistration, EventRegistrationId> {
 
+	
 }

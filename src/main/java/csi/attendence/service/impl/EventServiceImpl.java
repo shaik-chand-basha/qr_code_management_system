@@ -70,6 +70,8 @@ public class EventServiceImpl {
 		return EventMapper.mapToEventInfoResponse(savedEventInfo);
 
 	}
+	
+
 
 	public ApiResponse registerEvent(Long eventId, Long userId) {
 

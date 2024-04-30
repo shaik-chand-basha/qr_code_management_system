@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/layout :: head}">
+	<title>Creating Event</title>
+</head>
+
+<body>
+	<div th:replace="~{fragments/layout :: header}"></div>
+
+	<main id="main">
+
+		<!-- ======= Breadcrumbs ======= -->
+		<section id="breadcrumbs" class="breadcrumbs mt-0">
+			<div class="container">
+
+				<nav>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/">Home</a></li>
+						<li class="breadcrumb-item"><a href="/events">Events</a></li>
+						<li class="breadcrumb-item">Create</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="container">
+				<h4>Create Event</h4>
+				<div class="card">
+					<div class="card-body">
+
+						<form class="row g-3 needs-validation" onsubmit="validateForm(event)">
+
+
+							<div class="row g-3 my-1 needs-validation">
+								<div class="col-12">
+									<label for="title" class="form-label">Title Of Event</label>
+									<input type="text" name="title" class="form-control" id="title" required>
+									<div class="invalid-feedback"></div>
+
+								</div>
+
+								<div class="col-md-12">
+									<label for="description" class="form-label">Description</label>
+									<textarea class="form-control" id="description" name="description"
+										style="resize: vertical;" rows="3"></textarea>
+									<div class="invalid-feedback"></div>
+								</div>
+
+								<div class="col-md-4">
+									<label for="venue" class="form-label">Venue</label>
+									<input type="text" name="venue" class="form-control" id="venue" required>
+									<div class="invalid-feedback"></div>
+
+								</div>
+								<div class="col-md-4">
+									<label for="startingDate" class="form-label">Event starting Date</label>
+									<input type="date" class="form-control " id="startingDate" name="startingDate" required>
+									<div class="invalid-feedback"></div>
+								</div>
+
+								<div class="col-md-4">
+									<label for="endingDate" class="form-label">Event end date</label>
+									<input type="date" class="form-control " id="endingDate" name="endingDate" required>
+									<div class="invalid-feedback"></div>
+								</div>
+								<div class="col-12">
+									<label for="eventPhoto" class="form-label">Event Profile Photo</label>
+									<input type="file" onchange="readURL(this)" class="form-control" id="eventPhoto"
+										required accept="image/*" name="eventPhoto">
+									<label for="eventPhoto" class="card d-none" style="width: fit-content;">
+										<img src="" alt="" class="card-img" style="width: 100%;" srcset="">
+										<button
+											onclick="this.parentElement.parentElement.querySelector('input').click()"
+											type="button" class="btn btn-sm btn-warning">Change</button>
+									</label>
+								</div>
+
+							</div>
+
+							<div class="form-footer ">
+								<button type="submit" id="Register" class="btn btn-success">Create Event</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</main>
+
+	<script id="validation-form">
+
+		function readURL(element) {
+
+			let url = null
+			const file = element.files[0];
+
+			if (!file.type.startsWith('image/')) {
+				alert("Please upload image")
+				element.value = '';
+			}
+			url = element?.files?.[0] && URL.createObjectURL(file);
+			if (url) {
+				element.nextElementSibling.querySelector("img").src = url
+				element.nextElementSibling.classList.remove("d-none")
+				element.classList.add("d-none")
+			} else {
+				element.nextElementSibling.classList.add("d-none")
+				element.classList.remove("d-none")
+			}
+		}
+
+		function handleFormErrors(errorResponse) {
+			// Assuming 'errorResponse' is already parsed as JSON if received from a fetch response
+			errorResponse.forEach(error => {
+				// Extracting the last part of the 'property' path to get the input name
+				const fieldName = error.property.split('.').pop();
+
+				// Select the input element using the name extracted
+				const inputElement = document.querySelector(`[name="${fieldName}"]`);
+
+				if (inputElement) {
+					// Adding 'is-invalid' class to the input element
+					inputElement.classList.add('is-invalid');
+
+					// Assuming the next sibling is where the invalid-feedback message should go
+					const feedbackElement = inputElement.nextElementSibling;
+					if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+						// Set the error message
+						feedbackElement.textContent = error.message;
+						feedbackElement.style.display = 'block'; // Make sure it's visible
+					}
+				}
+			});
+		}
+		function validateForm(event) {
+
+			try {
+				event.preventDefault()
+				form = event.target
+				form.querySelectorAll("input,textarea,select").forEach(x => {
+					x.classList.remove("is-invalid")
+					if (x.nextElementSibling) {
+						if (!x.nextElementSibling.firstElementChild) {
+							// It's safe to clear or modify the textContent
+							x.nextElementSibling.textContent = "";
+						}
+					}
+
+
+				})
+
+
+
+				// Convert form data to JSON string
+				const formData = new FormData(form)
+
+
+
+				fetch('/api/v1/events', {
+					method: 'POST',
+					headers: {
+						'Access-Control-Allow-Origin': "*"
+					},
+					mode: "cors",
+					body: formData
+				})
+					.then(response => {
+						if (!response.ok) {
+							if (response.status == 400) {
+								return response.json().then(errors => handleFormErrors(errors)).then(x => response)
+							} else {
+								return response.json().then(errors => alert(errors.message)).then(x => response)
+							}
+						}
+						return response; // Or handle successful submission
+					})
+					.then(data => {
+						if (!data.ok) {
+							return
+						}
+						console.log('Created Event:', data.json())
+						alert("Event created successful")
+						location.reload()
+					})
+					.catch(error => {
+						console.error('Submission failed:', error)
+						alert("Creating event failed failed")
+					});
+
+
+			} catch (error) {
+				console.error(error)
+				return false
+			}
+			return false
+		}
+	</script>
+	<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>

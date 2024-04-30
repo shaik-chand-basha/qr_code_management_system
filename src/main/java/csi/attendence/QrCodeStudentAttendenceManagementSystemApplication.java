@@ -43,7 +43,7 @@ public class QrCodeStudentAttendenceManagementSystemApplication {
 				adminUser.setPassword(passwordEncoder.encode("admin"));
 				adminUser.setActive(true);
 
-				List<UserRole> adminRole = roleRepository.findByRoleIn(List.of("ADMIN"));
+				List<UserRole> adminRole = roleRepository.findByRoleIn(List.of("ROLE_ADMIN"));
 				adminUser.setRoles(adminRole);
 
 				userRepository.save(adminUser);

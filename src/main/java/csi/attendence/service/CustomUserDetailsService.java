@@ -34,5 +34,7 @@ public interface CustomUserDetailsService extends UserDetailsService {
 	ApiResponse passwordChange(PasswordResetFinalRequest request);
 
 	List<UserInfoResponse> findUsersByFirstNameAndLastName(UserRequest request);
+	List<UserInfoResponse> findAllUsersAttendenceByEventId(Long eventId);
+	List<UserInfoResponse> findAllUsersRegisteredByEventId(Long eventId);
 	
 }

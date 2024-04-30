@@ -84,6 +84,17 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
 				request.getDob());
 		return list;
 	}
+	
+	@Override
+	public List<UserInfoResponse> findAllUsersAttendenceByEventId(Long  eventId) {
+		List<UserInfoResponse> list = this.userRepository.findAllUsersAttendenceByEventId(eventId);
+		return list;
+	}
+	@Override
+	public List<UserInfoResponse> findAllUsersRegisteredByEventId(Long  eventId) {
+		List<UserInfoResponse> list = this.userRepository.findAllUsersRegisteredByEventId(eventId);
+		return list;
+	}
 
 	@Override
 	public ApiResponse passwordChange(PasswordResetFinalRequest request) {

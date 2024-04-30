@@ -42,7 +42,7 @@ public class EventController {
 		return ResponseEntity.ok(eventInfoResponse);
 	}
 
-	@PostMapping("/{event_id}/register/user/{user_id}")
+	@GetMapping("/{event_id}/register/user/{user_id}")
 	public ResponseEntity<ApiResponse> registerEvent(@Valid @NotNull @PathVariable("event_id") Long eventId,
 			@Valid @NotNull @PathVariable("user_id") Long userId) {
 		ApiResponse apiResponse = this.eventService.registerEvent(eventId, userId);

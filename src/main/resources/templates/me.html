@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{fragments/layout :: head}">
+
+	<title>CSI Student Branch Bootstrap Template - Index</title>
+
+</head>
+
+<body>
+	<div th:replace="~{fragments/layout :: header}"></div>
+	<main id="main" th:data-user-id="${#authentication.getPrincipal().getUserId()}">
+
+		<!-- ======= Breadcrumbs ======= -->
+		<section id="breadcrumbs" class="breadcrumbs mt-0">
+			<div class="container">
+
+				<nav>
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="/">Home</a></li>
+						<li class="breadcrumb-item">Profile</li>
+						<li class="breadcrumb-item" th:text="${#authentication.getPrincipal().getUserId()}"></li>
+					</ol>
+				</nav>
+			</div>
+		</section>
+		<div class="container card p-1 my-1">
+			<div class="card-body row">
+				<div id="qrcode"></div>
+			</div>
+		</div>
+			<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+
+		<script>
+			const qrcode = new QRCode(document.getElementById('qrcode'), {
+				text: document.querySelector("main[data-user-id]").getAttribute("data-user-id"),
+				width: 500,
+				height: 500,
+				colorDark: '#000',
+				colorLight: '#fff',
+				correctLevel: QRCode.CorrectLevel.H
+			});
+		</script>
+	</main>
+	<div th:replace="~{fragments/layout :: footer}"></div>
+
+</body>
+
+</html>
