@@ -24,14 +24,18 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@Data
-@RequiredArgsConstructor
 @Transactional
 public class EmailServiceImpl {
+
+	public EmailServiceImpl(EmailRepository emailRepository, TokenValidationsRepository tokenValidationsRepository,
+			JavaMailSender mailSender) {
+		super();
+		this.emailRepository = emailRepository;
+		this.tokenValidationsRepository = tokenValidationsRepository;
+		this.mailSender = mailSender;
+	}
 
 	@Value("${spring.mail.username}")
 	private String sender;

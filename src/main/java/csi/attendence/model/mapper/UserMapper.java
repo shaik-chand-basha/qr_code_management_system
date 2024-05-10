@@ -1,6 +1,5 @@
 package csi.attendence.model.mapper;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,6 +1,5 @@
 package csi.attendence.service.impl;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -46,16 +45,29 @@ import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.utils.AuthenticationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Getter
-@Setter
 public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
+
+	public CustomUserDetailsServiceImpl(UserRepository userRepository, ImageMetadataRepository imageMetadataRepository,
+			StudentRepository studentRepository, ImageMetadataServiceImpl imageMetadataService,
+			UserroleRepository userroleRepository, TokenValidationsRepository tokenValidationsRepository,
+			AuthenticationRepository authenticationRepository, PasswordEncoder passwordEncoder,
+			EmailServiceImpl emailService, EntityManager em, ApplicationEventPublisher applicationEventPublisher) {
+		super();
+		this.userRepository = userRepository;
+		this.imageMetadataRepository = imageMetadataRepository;
+		this.studentRepository = studentRepository;
+		this.imageMetadataService = imageMetadataService;
+		this.userroleRepository = userroleRepository;
+		this.tokenValidationsRepository = tokenValidationsRepository;
+		this.authenticationRepository = authenticationRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.emailService = emailService;
+		this.em = em;
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
 
 	private final UserRepository userRepository;
 	private final ImageMetadataRepository imageMetadataRepository;

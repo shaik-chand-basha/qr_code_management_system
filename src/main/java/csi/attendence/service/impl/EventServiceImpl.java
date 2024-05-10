@@ -1,6 +1,5 @@
 package csi.attendence.service.impl;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,11 +27,23 @@ import csi.attendence.repository.EventInfoRepository;
 import csi.attendence.repository.EventPhotoRepository;
 import csi.attendence.repository.EventRegistrationRepository;
 import csi.attendence.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
+
 @Service
 public class EventServiceImpl {
+
+	public EventServiceImpl(EventInfoRepository eventInfoRepository,
+			EventRegistrationRepository eventRegistrationRepository,
+			EventAttendenceRepository eventAttendenceRepository, UserRepository userRepository,
+			ImageMetadataServiceImpl imageMetadataService, EventPhotoRepository eventPhotoRepository) {
+		super();
+		this.eventInfoRepository = eventInfoRepository;
+		this.eventRegistrationRepository = eventRegistrationRepository;
+		this.eventAttendenceRepository = eventAttendenceRepository;
+		this.userRepository = userRepository;
+		this.imageMetadataService = imageMetadataService;
+		this.eventPhotoRepository = eventPhotoRepository;
+	}
 
 	private final EventInfoRepository eventInfoRepository;
 

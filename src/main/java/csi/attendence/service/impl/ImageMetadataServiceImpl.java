@@ -1,7 +1,6 @@
 package csi.attendence.service.impl;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -21,12 +20,16 @@ import csi.attendence.entity.ImageMetadata;
 import csi.attendence.exceptions.BadRequestException;
 import csi.attendence.repository.ImageMetadataRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+
 @Transactional
 public class ImageMetadataServiceImpl {
+
+	public ImageMetadataServiceImpl(ImageMetadataRepository imageRepository) {
+		super();
+		this.imageRepository = imageRepository;
+	}
 
 	private final ImageMetadataRepository imageRepository;
 

@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
-import javax.security.auth.login.AccountExpiredException;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,11 +27,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationServiceImpl {
+
+	public JwtAuthenticationServiceImpl(CustomUserDetailsService customUserDetailsService,
+			AuthenticationRepository authenticationRepository) {
+		super();
+		this.customUserDetailsService = customUserDetailsService;
+		this.authenticationRepository = authenticationRepository;
+	}
 
 	final CustomUserDetailsService customUserDetailsService;
 
