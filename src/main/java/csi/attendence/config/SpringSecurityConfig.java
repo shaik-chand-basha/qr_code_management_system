@@ -11,7 +11,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -20,14 +19,18 @@ import csi.attendence.filter.JwtTokenValidatorFilter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 @Configuration
-@RequiredArgsConstructor
 public class SpringSecurityConfig {
 
 	private final JwtTokenValidatorFilter jwtTokenValidatorFilter;
 
+	public SpringSecurityConfig(JwtTokenValidatorFilter jwtTokenValidatorFilter) {
+		super();
+		this.jwtTokenValidatorFilter = jwtTokenValidatorFilter;
+	}
+
+	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -81,6 +84,7 @@ public class SpringSecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+
 
 }
 

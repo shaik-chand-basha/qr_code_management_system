@@ -13,16 +13,21 @@ import csi.attendence.model.request.PasswordResetFinalRequest;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.model.response.EventInfoResponse;
 import csi.attendence.model.response.UserInfoResponse;
-import csi.attendence.repository.UserRepository;
 import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.service.impl.EmailServiceImpl;
 import csi.attendence.service.impl.EventServiceImpl;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequiredArgsConstructor
 public class GeneralController {
+
+	public GeneralController(EmailServiceImpl emailService, EventServiceImpl eventService,
+			CustomUserDetailsService customUserDetailsService) {
+		super();
+		this.emailService = emailService;
+		this.eventService = eventService;
+		this.customUserDetailsService = customUserDetailsService;
+	}
 
 	private final EmailServiceImpl emailService;
 

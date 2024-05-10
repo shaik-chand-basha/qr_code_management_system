@@ -17,13 +17,11 @@ import csi.attendence.entity.ImageMetadata;
 import csi.attendence.model.response.ApiResponse;
 import csi.attendence.service.impl.ImageMetadataServiceImpl;
 import csi.attendence.utils.UrlUtils;
-import jakarta.validation.constraints.Size;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(ImageController.BASE_URL)
 @Validated
-@RequiredArgsConstructor
+
 public class ImageController {
 
 	public static final String BASE_URL = "/api/v1/image";
@@ -38,5 +36,10 @@ public class ImageController {
 				.message(imageMetadata.getId().toString()).build();
 
 		return ResponseEntity.created(URI.create(UrlUtils.pathToUrl(imageMetadata.getPathToImage()))).body(apiResponse);
+	}
+
+	public ImageController(ImageMetadataServiceImpl imageMetadataService) {
+		super();
+		this.imageMetadataService = imageMetadataService;
 	}
 }

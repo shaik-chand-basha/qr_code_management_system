@@ -23,13 +23,16 @@ import csi.attendence.service.impl.EventServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(EventController.BASE_URL)
 @Validated
-@RequiredArgsConstructor
 public class EventController {
+
+	public EventController(EventServiceImpl eventService) {
+		super();
+		this.eventService = eventService;
+	}
 
 	public static final String BASE_URL = "/api/v1/events";
 

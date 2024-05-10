@@ -1,7 +1,6 @@
 package csi.attendence.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,12 +23,16 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
+	public JwtTokenValidatorFilter(JwtAuthenticationServiceImpl authenticationService) {
+		super();
+		this.authenticationService = authenticationService;
+	}
+
+	
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 		return request.getServletPath().equals("/api/v1/login");
@@ -42,6 +45,12 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 	@Autowired
 	@Qualifier("handlerExceptionResolver")
 	public  HandlerExceptionResolver resolver;
+
+
+	public void setResolver(HandlerExceptionResolver resolver) {
+		this.resolver = resolver;
+	}
+
 
 	@SuppressWarnings("deprecation")
 //	@Override
@@ -80,5 +89,6 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
+
 
 }

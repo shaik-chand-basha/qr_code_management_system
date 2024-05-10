@@ -53,7 +53,10 @@ CREATE TABLE user_info_role (
         REFERENCES user_info (user_id)
 );
 
-insert into user_role(`user_role`,`active`) values ("ROLE_ADMIN",1),("ROLE_STUDENT",1),("ROLE_INCHARGE",1);
+INSERT INTO user_role(user_role, active) VALUES 
+('ROLE_ADMIN', 1),
+('ROLE_STUDENT', 1),
+('ROLE_INCHARGE', 1);
 
 CREATE TABLE email_verification (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,

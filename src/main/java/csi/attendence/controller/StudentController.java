@@ -16,11 +16,9 @@ import csi.attendence.service.CustomUserDetailsService;
 import csi.attendence.utils.UrlUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(path = StudentController.BASE_URL)
-@RequiredArgsConstructor
 @Validated
 public class StudentController {
 
@@ -47,5 +45,10 @@ public class StudentController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(studentResponse);
+	}
+
+	public StudentController(CustomUserDetailsService customUserDetailsService) {
+		super();
+		this.customUserDetailsService = customUserDetailsService;
 	}
 }

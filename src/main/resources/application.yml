@@ -18,15 +18,15 @@ spring:
   application:
     name: Aurora-QR-Code-base-Attendence-Management-System
   datasource:
-    url: jdbc:mysql://localhost:3306/user_registration
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: p@s3$123
+    url: jdbc:h2:mem:student_management_db
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
   h2:
     console:
       enabled: true
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: validate
     show-sql: true

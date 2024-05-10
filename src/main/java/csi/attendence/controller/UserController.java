@@ -33,12 +33,19 @@ import csi.attendence.service.impl.JwtAuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(UserController.BASE_URL)
-@RequiredArgsConstructor
+
 public class UserController {
+
+	public UserController(EmailServiceImpl emailService, CustomUserDetailsService customUserDetailsService,
+			JwtAuthenticationServiceImpl authenticationService) {
+		super();
+		this.emailService = emailService;
+		this.customUserDetailsService = customUserDetailsService;
+		this.authenticationService = authenticationService;
+	}
 
 	public final static String BASE_URL = "/api/v1";
 	private final EmailServiceImpl emailService;
