@@ -6608,3 +6608,62 @@ Caused by: java.nio.file.InvalidPathException: Illegal char <:> at index 9: clas
 2024-05-13T12:11:22.997+05:30  INFO 23916 --- [Aurora-QR-Code-base-Attendence-Management-System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-05-13T12:11:23.001+05:30  INFO 23916 --- [Aurora-QR-Code-base-Attendence-Management-System] [SpringApplicationShutdownHook] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
 2024-05-13T12:11:23.005+05:30  INFO 23916 --- [Aurora-QR-Code-base-Attendence-Management-System] [SpringApplicationShutdownHook] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-05-13T12:19:33.453+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [background-preinit] o.h.v.i.u.Version                        : HV000001: Hibernate Validator 8.0.1.Final
+2024-05-13T12:19:33.500+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] entAttendenceManagementSystemApplication : Starting QrCodeStudentAttendenceManagementSystemApplication using Java 17.0.8.1 with PID 43584 (C:\practice\spring boot\qr-code-attendance-management\QR-Code-Student-Attendence-Management-System\target\classes started by ChandPashaShaik in C:\practice\spring boot\qr-code-attendance-management\QR-Code-Student-Attendence-Management-System)
+2024-05-13T12:19:33.519+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] entAttendenceManagementSystemApplication : No active profile set, falling back to 1 default profile: "default"
+2024-05-13T12:19:33.834+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-13T12:19:33.834+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-13T12:19:34.679+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-13T12:19:34.772+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 85 ms. Found 11 JPA repository interfaces.
+2024-05-13T12:19:35.410+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.b.w.e.t.TomcatWebServer              : Tomcat initialized with port 8000 (http)
+2024-05-13T12:19:35.421+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.a.c.h.Http11NioProtocol                : Initializing ProtocolHandler ["http-nio-8000"]
+2024-05-13T12:19:35.422+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2024-05-13T12:19:35.423+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.a.c.c.StandardEngine                   : Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-05-13T12:19:35.488+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.a.c.c.C.[.[.[/]                        : Initializing Spring embedded WebApplicationContext
+2024-05-13T12:19:35.489+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1654 ms
+2024-05-13T12:19:35.536+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Starting...
+2024-05-13T12:19:35.822+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] c.z.h.p.HikariPool                       : HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./src/main/resources/db/embdedded/h2 user=SA
+2024-05-13T12:19:35.825+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Start completed.
+2024-05-13T12:19:35.835+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.b.a.h.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:file:./src/main/resources/db/embdedded/h2'
+2024-05-13T12:19:35.968+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.l.VersionPrinter                 : Flyway Community Edition 9.22.3 by Redgate
+2024-05-13T12:19:35.969+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.l.VersionPrinter                 : See release notes here: https://rd.gt/416ObMi
+2024-05-13T12:19:35.969+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.l.VersionPrinter                 : 
+2024-05-13T12:19:36.019+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.FlywayExecutor                     : Database: jdbc:h2:file:./src/main/resources/db/embdedded/h2 (H2 2.2)
+2024-05-13T12:19:36.027+05:30  WARN 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.d.b.Database                     : Flyway upgrade recommended: H2 2.2.224 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
+2024-05-13T12:19:36.062+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.c.DbValidate                     : Successfully validated 3 migrations (execution time 00:00.025s)
+2024-05-13T12:19:36.072+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.c.DbMigrate                      : Current version of schema "PUBLIC": 3
+2024-05-13T12:19:36.074+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.f.c.i.c.DbMigrate                      : Schema "PUBLIC" is up to date. No migration necessary.
+2024-05-13T12:19:36.153+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.h.j.i.u.LogHelper                      : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-13T12:19:36.221+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.h.Version                              : HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-05-13T12:19:36.255+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.h.c.i.RegionFactoryInitiator           : HHH000026: Second-level cache disabled
+2024-05-13T12:19:36.518+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-13T12:19:36.564+05:30  WARN 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.h.o.deprecation                        : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-05-13T12:19:37.841+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-13T12:19:37.867+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-13T12:19:38.162+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.d.j.r.q.QueryEnhancerFactory         : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-05-13T12:19:38.960+05:30  WARN 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-13T12:19:39.484+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-05-13T12:19:39.727+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.s.w.DefaultSecurityFilterChain       : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@568dfd8f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4af880ad, org.springframework.security.web.context.SecurityContextHolderFilter@6510df6b, org.springframework.security.web.header.HeaderWriterFilter@1c47ec67, org.springframework.security.web.authentication.logout.LogoutFilter@515e5b3f, csi.attendence.filter.JwtTokenValidatorFilter@2a357fa3, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@dcb02e2, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@5b3b514a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@9a431ff, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2f65752e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4b4839b9, org.springframework.security.web.session.SessionManagementFilter@1889d332, org.springframework.security.web.access.ExceptionTranslationFilter@515d5ec7, org.springframework.security.web.access.intercept.AuthorizationFilter@36901c1b]
+2024-05-13T12:19:40.245+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-05-13T12:19:40.282+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.a.c.h.Http11NioProtocol                : Starting ProtocolHandler ["http-nio-8000"]
+2024-05-13T12:19:40.288+05:30  WARN 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-05-13T12:19:40.294+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-13T12:19:40.297+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown initiated...
+2024-05-13T12:19:40.304+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] c.z.h.HikariDataSource                   : HikariPool-1 - Shutdown completed.
+2024-05-13T12:19:40.320+05:30  INFO 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-05-13T12:19:40.345+05:30 ERROR 43584 --- [Aurora-QR-Code-base-Attendence-Management-System] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8000 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8000 or configure this application to listen on another port.
+
