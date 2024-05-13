@@ -10,7 +10,7 @@
 	<groupId>chand.projects</groupId>
 	<artifactId>QR-Code-Student-Attendence-Management-System</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>QR-Code-Student-Attendence-Management-System</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
