@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import csi.attendence.exceptions.AlreadyExistsException;
 import csi.attendence.exceptions.BadRequestException;
+import csi.attendence.exceptions.LoginRequiredException;
 import csi.attendence.exceptions.UserNotFoundException;
 import csi.attendence.model.response.ConstraintViolentResponse;
 import csi.attendence.model.response.ErrorResponse;
@@ -40,7 +41,7 @@ public class GlobalExceptionHandler {
 
 		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage())
 				.message(ex.getMessage()).path(request.getDescription(false).replace("uri=", "")).build();
-
+		
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
 	}
 
@@ -49,8 +50,10 @@ public class GlobalExceptionHandler {
 
 		ErrorResponse errorResponse = ErrorResponse.builder().timestamp(new Date()).error(ex.getMessage())
 				.message(ex.getMessage()).path(request.getDescription(false).replace("uri=", "")).build();
-
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Location", "/logout").body(errorResponse);
+		if(true) {
+			throw new LoginRequiredException();
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("Location", "/login").body(errorResponse);
 	}
 
 	@ExceptionHandler(BadRequestException.class)

@@ -1,7 +1,11 @@
 package csi.attendence.filter;
 
+import static csi.attendence.utils.UrlUtils.setSecureCookie;
+
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,40 +31,44 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
+	public static final List<String> SHOULD_NOT_FILTER = List.of("/login", "/api/v1/login", "/register", "/assets");
+
 	public JwtTokenValidatorFilter(JwtAuthenticationServiceImpl authenticationService) {
 		super();
 		this.authenticationService = authenticationService;
 	}
 
-	
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		return request.getServletPath().equals("/api/v1/login");
+		return SHOULD_NOT_FILTER.stream().anyMatch(x -> request.getServletPath().startsWith(x));
 	}
-	
+
 	private final static Logger LOGGER = LogManager.getLogger(JwtTokenValidatorFilter.class);
 
 	private final JwtAuthenticationServiceImpl authenticationService;
 
 	@Autowired
 	@Qualifier("handlerExceptionResolver")
-	public  HandlerExceptionResolver resolver;
-
+	public HandlerExceptionResolver resolver;
 
 	public void setResolver(HandlerExceptionResolver resolver) {
 		this.resolver = resolver;
 	}
-
 
 	@SuppressWarnings("deprecation")
 //	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 //		System.out.println();
-		String accessToken =request.getCookies()==null?null: Arrays.asList(request.getCookies()).stream().filter(x->x.getName().equals("accessToken")).map(x->x.getValue()).findAny().orElse(null);
+		String accessToken = request.getCookies() == null ? null
+				: Arrays.asList(request.getCookies()).stream().filter(x -> x.getName().equals("accessToken"))
+						.map(x -> x.getValue()).findAny().orElse(null);
 		try {
-			if(StringUtils.isBlank(accessToken)) {
-				throw new AccessTokenNotFound();
+			if (StringUtils.isBlank(accessToken)) {
+				if (!SHOULD_NOT_FILTER.stream().anyMatch(x -> x.startsWith(request.getServletPath()))) {
+
+					throw new AccessTokenNotFound();
+				}
 			}
 			User user = this.authenticationService.validateAccessToken(accessToken);
 			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null,
@@ -69,6 +77,8 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 			SecurityContextHolder.getContext().setAuthentication(auth);
 		} catch (RuntimeException e) {
 			LOGGER.error(e.getMessage());
+			setSecureCookie(response, "accessToken", null, new Date());
+			setSecureCookie(response, "refreshToken", null, new Date());
 			resolver.resolveException(request, response, null, e);
 		}
 //		String jwtHeader = request.getHeader("Authorization");
@@ -89,6 +99,5 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 
 	}
-
 
 }

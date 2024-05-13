@@ -33,7 +33,7 @@ import csi.attendence.service.impl.JwtAuthenticationServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-
+import static csi.attendence.utils.UrlUtils.setSecureCookie;
 @RestController
 @RequestMapping(UserController.BASE_URL)
 
@@ -67,14 +67,15 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<AuthenticationResponse> login(Authentication authentication,HttpServletResponse response) {
+	public ResponseEntity<AuthenticationResponse> login(Authentication authentication, HttpServletResponse response) {
 		if (authentication == null) {
 			throw new UsernameNotFoundException("username not found");
 		}
 		User user = (User) authentication.getPrincipal();
 		AuthenticationResponse authResponse = authenticationService.generateAuthenticationInfo(user);
-        setSecureCookie(response, "accessToken", authResponse.getAccessToken(), authResponse.getExpiresAt());
-        setSecureCookie(response, "refreshToken", authResponse.getRefreshToken(), authResponse.getRefreshTokenExpiresAt());
+		setSecureCookie(response, "accessToken", authResponse.getAccessToken(), authResponse.getExpiresAt());
+		setSecureCookie(response, "refreshToken", authResponse.getRefreshToken(),
+				authResponse.getRefreshTokenExpiresAt());
 
 		return ResponseEntity.status(HttpStatus.OK).body(authResponse);
 	}
@@ -109,17 +110,7 @@ public class UserController {
 		List<UserInfoResponse> list = this.customUserDetailsService.findUsersByFirstNameAndLastName(request);
 		return ResponseEntity.ok(list);
 	}
-	
-	 private void setSecureCookie(HttpServletResponse response, String name, String value, Date expiresAt) {
-	        ResponseCookie cookie = ResponseCookie.from(name, value)
-	                .httpOnly(true)   // Cookie not accessible via JavaScript
-	                .secure(true)    // Cookie sent only over HTTPS
-	                .sameSite("Strict") // Cookie is not sent with cross-site requests
-	                .path("/")       // Cookie available throughout the domain
-	                .maxAge((expiresAt.getTime() - System.currentTimeMillis()) / 1000) // Convert from milliseconds to seconds
-	                .build();
-	        
-	        response.addHeader("Set-Cookie", cookie.toString());
-	    }
+
+
 
 }

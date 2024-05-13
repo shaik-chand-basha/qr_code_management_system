@@ -18,7 +18,7 @@ spring:
   application:
     name: Aurora-QR-Code-base-Attendence-Management-System
   datasource:
-    url: jdbc:h2:mem:student_management_db
+    url: jdbc:h2:file:./src/main/resources/db/embdedded/h2
     driverClassName: org.h2.Driver
     username: sa
     password: sa

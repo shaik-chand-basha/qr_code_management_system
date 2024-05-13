@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import csi.attendence.exceptions.AccessTokenNotFound;
 import csi.attendence.exceptions.EmailVerificationExpiredException;
 import csi.attendence.exceptions.LoginRequiredException;
 
@@ -14,13 +15,15 @@ public class GeneralControllerAdvice {
 	public String handleEmailVerificationExpiredException(EmailVerificationExpiredException ex, WebRequest request) {
 		return "email_verification-failed";
 	}
-	
+
 	@ExceptionHandler(LoginRequiredException.class)
 	public String loginRequired(LoginRequiredException ex, WebRequest request) {
 		return "redirect:/login";
 	}
 	
-	
-	
-	
+	@ExceptionHandler(AccessTokenNotFound.class)
+	public String loginRequired(AccessTokenNotFound ex, WebRequest request) {
+		return "redirect:/login";
+	}
+
 }
